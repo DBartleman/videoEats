@@ -12,6 +12,9 @@
 * User
   * Creation
   * login / auth / route-role cohesion
+* Link/presentation to all reviews of user
+* Link/presentation to all reviews for business
+
 
 ## Bonus Features
 * Upvote / downvote
