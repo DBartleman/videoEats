@@ -1,0 +1,43 @@
+{
+  "name": "videoEats",
+  "version": "1.0.0",
+  "description": "An app for finding good places to eat nearby through firsthand video reviews.",
+  "main": "app.js",
+  "bin": {
+    "videoEats": "www.js"
+  },
+  "scripts": {
+    "start": "per-env",
+    "start:development": "nodemon -r dotenv/config ./bin/www",
+    "start:production": "./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DBartleman/videoEats.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DBartleman/videoEats/issues"
+  },
+  "homepage": "https://github.com/DBartleman/videoEats#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "faker": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "per-env": "^1.0.2",
+    "pg": "^8.0.0",
+    "sequelize": "^5.21.6"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^3.1.0",
+    "nodemon": "^2.0.2",
+    "sequelize-cli": "^5.5.1"
+  }
+}

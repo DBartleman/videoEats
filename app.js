@@ -6,7 +6,7 @@ const { environment } = require('./config');
 
 //routers
 const indexRouter = require('./routes/index');
-const tweetRouter = require('./routes/tweets');
+const businessesRouter = require('./routes/businesses');
 const usersRouter = require('./routes/users');
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(cors({ origin: 'http://localhost:4000' }));//change path to host-address
 
 //mount routes
 app.use('/', indexRouter);
-app.use('/tweets', tweetRouter);
+app.use('/businesses', businessesRouter);
 app.use('/users', usersRouter);
 
 
