@@ -1,5 +1,5 @@
 {
-  "name": "videoEats",
+  "name": "videoeats",
   "version": "1.0.0",
   "description": "An app for finding good places to eat nearby through firsthand video reviews.",
   "main": "app.js",

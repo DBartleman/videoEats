@@ -1,8 +1,8 @@
 const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const { User, Tweet } = require('../db/models');
+const { User, Review } = require('../db/models');
 const { getUserToken, requireAuth } = require('../utils/auth.js');
 
 const router = express.Router();
@@ -22,11 +22,7 @@ const validateEmailAndPassword = [
         .withMessage("Please provide a password."),
 ];
 
-router.post(
-    '/',
-    validateUsername,
-    validateEmailAndPassword,
-    handleValidationErrors,
+router.post('/', validateUsername, validateEmailAndPassword, handleValidationErrors,
     asyncHandler(async (req, res) => {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,18 +53,18 @@ router.post('/token',
             err.errors = ["The provided credentials were invalid."];
             return next(err);
         }
-        //todo token gen
+        //login successful
         const token = getUserToken(user);
-        res.json({ token, user: { id: user.id } });
+        res.json({ token, user: { id: user.id } });//why are we creating an object for value of 'user' key??? (line 33)
     })
 )
 
-router.get('/:id/tweets', requireAuth, asyncHandler(async (req, res) => {
+router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
     const userId = req.params.id;
-    const tweets = await Tweet.findAll({
+    const reviews = await Review.findAll({
         where: { userId: userId }
     });
-    res.json({ tweets });
+    res.json({ reviews });
 }))
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const { User, Tweet } = require('../db/models');
+const { User, Review } = require('../db/models');
 const { getUserToken, requireAuth } = require('../utils/auth.js');
 
 const router = express.Router();
@@ -28,10 +28,11 @@ router.post(
     validateEmailAndPassword,
     handleValidationErrors,
     asyncHandler(async (req, res) => {
-        const { username, email, password } = req.body;
+        const { username, email, password } = req.body;//what parameters do we need for biz???
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, email, hashedPassword });
+        const business = await Business.create({ username, email, hashedPassword });
 
+        //remove token creation???
         const token = getUserToken(user);
         res.status(201).json({
             user: { id: user.id },
@@ -40,35 +41,35 @@ router.post(
     })
 );
 
-router.post('/token',
-    validateEmailAndPassword,
-    asyncHandler(async (req, res, next) => {
-        const { email, password } = req.body;
-        const user = await User.findOne({
-            where: {
-                email,
-            },
-        });
-        //todo pass validate and error handling
-        if (!user || !user.validatePassword(password)) {
-            const err = new Error("Login failed");
-            err.status = 401;
-            err.title = "Login failed";
-            err.errors = ["The provided credentials were invalid."];
-            return next(err);
-        }
-        //todo token gen
-        const token = getUserToken(user);
-        res.json({ token, user: { id: user.id } });
-    })
-)
+// router.post('/token',
+//     validateEmailAndPassword,
+//     asyncHandler(async (req, res, next) => {
+//         const { email, password } = req.body;
+//         const user = await User.findOne({
+//             where: {
+//                 email,
+//             },
+//         });
+//         //todo pass validate and error handling
+//         if (!user || !user.validatePassword(password)) {
+//             const err = new Error("Login failed");
+//             err.status = 401;
+//             err.title = "Login failed";
+//             err.errors = ["The provided credentials were invalid."];
+//             return next(err);
+//         }
+//         //todo token gen
+//         const token = getUserToken(user);
+//         res.json({ token, user: { id: user.id } });
+//     })
+// )
 
-router.get('/:id/tweets', requireAuth, asyncHandler(async (req, res) => {
-    const userId = req.params.id;
-    const tweets = await Tweet.findAll({
-        where: { userId: userId }
+router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
+    const businessesId = req.params.id;
+    const reviews = await Review.findAll({
+        where: { businessId: businessId }
     });
-    res.json({ tweets });
+    res.json({ reviews });
 }))
 
 module.exports = router;
