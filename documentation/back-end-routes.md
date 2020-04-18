@@ -1,6 +1,6 @@
 # Back-End Routes
 
-**##Businesses**
+## **Businesses**
 
 * POST /businesses/ - creates a new business object
 * GET /businesses/:id/reviews - returns all reviews for a given business
@@ -8,31 +8,26 @@
 * PUT /businesses/:id - updates a given business
 * DELETE /businesses/:id - deletes a given business
  
-**##Reviews**
+## **Reviews**
  
-* POST /reviews/ - creates a new review
-* GET /reviews/:id - returns a given review
-* PUT /reviews/:id - updates a given review
-* DELETE /reviews/:id - deletes a given review
+* POST /businesses/:biz_id/reviews/ - creates a new review
+* GET /businesses/:biz_id/reviews/:id - returns a given review
+* PUT /businesses/:biz_id/reviews/:id - updates a given review
+* DELETE /businesses/:biz_id/reviews/:id - deletes a given review
  
-**##CategoryTypes**
+## **Tags**
  
-* GET /categoryTypes/ - returns all category type options
+* POST /businesses/:biz_id/tags - creates a new tag object and attaches it to specified business
+* GET /businesses/tags - returns all existing tag options
+* GET /businesses/:biz_id/tags/ - returns all tags for specified busienss
+* PUT /businesses/:biz_id/tags/:id - updates a given tag
+* DELETE /businesses/:biz_id/tags/:id - deletes a given tag for specified business
  
-**##Users**
+## **Users**
  
-* POST /users/ - creates new user
+* POST /users/ - creates new user **functioning 4.18.20**
+* GET /users/:id - returns a given user **functioning 4.18.20**
+* PUT /users/:id - updates a given user **functioning 4.18.20**
+* DELETE /users/:id - deletes a given user **functioning 4.18.20**
+* POST /users/token - gets JWT auth token for user
 * GET /users/:id/reviews - returns all reviews for a given user
-* GET /users/:id - returns a given user
-* PUT /users/:id - updates a given user
-* DELETE /users/:id - deletes a given user
-* GET /users/token - gets JWT auth token for user
-
-**##Owners (stretch)**
-(Should Owners be separate entities or is it better to utilize Users with specified role???)
-
-* POST /owners/ - creates new owner
-* GET /owners/:id/reviews - returns all reviews for a given owner
-* GET /owners/:id - returns a given owner
-* PUT /owners/:id - updates a given owner
-* DELETE /owners/:id - deletes a given owner
