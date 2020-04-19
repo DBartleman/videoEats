@@ -93,7 +93,7 @@ router.post('/token', validateEmailAndPassword, asyncHandler(async (req, res, ne
             email,
         },
     });
-    //todo pass validate and error handling
+    //pass validate and error handling
     if (!user || !user.validatePassword(password)) {
         const err = new Error("Login failed");
         err.status = 401;
@@ -103,7 +103,7 @@ router.post('/token', validateEmailAndPassword, asyncHandler(async (req, res, ne
     }
     //login successful
     const token = getUserToken(user);
-    res.json({ token, user: { id: user.id } });//why are we creating an object for value of 'user' key??? (line 33)
+    res.json({ token, user: { id: user.id } });
 }));
 
 router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {

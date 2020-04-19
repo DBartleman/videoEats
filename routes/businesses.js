@@ -2,7 +2,7 @@ const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
 const { check } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const { User, Review } = require('../db/models');
+const { Business, Review } = require('../db/models');
 const { getUserToken, requireAuth } = require('../utils/auth.js');
 
 const router = express.Router();
@@ -36,6 +36,7 @@ router.post(
         const token = getUserToken(user);
         res.status(201).json({
             user: { id: user.id },
+            business: { id: business.id },
             token,
         });
     })
@@ -69,7 +70,10 @@ router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
     const reviews = await Review.findAll({
         where: { businessId: businessId }
     });
-    res.json({ reviews });
+    res.json({
+        reviews,
+        business: { id: business.id }
+    });
 }))
 
 module.exports = router;
