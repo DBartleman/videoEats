@@ -6,9 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     reviewId: { type: DataTypes.INTEGER, allowNull: false }
   }, {});
   VoteInstance.associate = function (models) {
-    VoteInstance.belongsToMany(models.VoteType, { foreignKey: 'typeId' });
-    VoteInstance.belongsToMany(models.User, { foreignKey: 'userId' });
-    VoteInstance.belongsToMany(models.Review, { foreignKey: 'reviewId' });
+    // VoteInstance.belongsToMany(models.VoteType, { foreignKey: 'typeId' });
+    // VoteInstance.belongsToMany(models.User, { foreignKey: 'userId' });
+    // VoteInstance.belongsToMany(models.Review, { foreignKey: 'reviewId' });
   };
   return VoteInstance;
 };

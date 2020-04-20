@@ -23,6 +23,8 @@ const validateEmailAndPassword = [
 ];
 
 //routes
+
+//create user
 router.post('/', validateUsername, validateEmailAndPassword, handleValidationErrors, asyncHandler(async (req, res) => {
     const { userName, firstName, lastName, email, password, revScore, statusTypeId } = req.body;
     const hashedPass = await bcrypt.hash(password, 10);
@@ -39,6 +41,7 @@ router.post('/', validateUsername, validateEmailAndPassword, handleValidationErr
 })
 );
 
+//get specific user
 router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.params.id, {
         include: [{ model: StatusType, attributes: ['type'] }],
@@ -55,6 +58,7 @@ router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
     });
 }))
 
+//update specific user
 router.put('/:id(\\d+)', validateUsername, validateEmailAndPassword, asyncHandler(async (req, res, next) => {
     const user = await User.findByPk(req.params.id, {
         include: [{ model: StatusType, attributes: ['type'] }],
@@ -78,6 +82,7 @@ router.put('/:id(\\d+)', validateUsername, validateEmailAndPassword, asyncHandle
     }
 }));
 
+//delete specific user
 router.delete('/:id(\\d+)', validateUsername, validateEmailAndPassword, asyncHandler(async (req, res, next) => {
     const user = await User.findByPk(req.params.id, {
         attributes: ['id']
@@ -86,6 +91,7 @@ router.delete('/:id(\\d+)', validateUsername, validateEmailAndPassword, asyncHan
     res.end();
 }));
 
+//authenticate
 router.post('/token', validateEmailAndPassword, asyncHandler(async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({
@@ -106,6 +112,8 @@ router.post('/token', validateEmailAndPassword, asyncHandler(async (req, res, ne
     res.json({ token, user: { id: user.id } });
 }));
 
+//get all reviews for specific user
+//unfinished****(4.19.20)
 router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
     const userId = req.params.id;
     const reviews = await Review.findAll({

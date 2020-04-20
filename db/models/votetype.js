@@ -1,10 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Vote = sequelize.define('VoteType', {
+  const VoteType = sequelize.define('VoteType', {
     type: { type: DataTypes.STRING(15), allowNull: false, unique: true },
   }, {});
   VoteType.associate = function (models) {
-    VoteType.belongsToMany(models.VoteInstance, { foreignKey: 'typeId' });
+    VoteType.belongsToMany(models.User, {
+      through: models.VoteInstance,
+      foreignKey: 'typeId',
+      otherKey: 'userId'
+    });
+    VoteType.belongsToMany(models.Review, {
+      through: models.VoteInstance,
+      foreignKey: 'typeId',
+      otherKey: 'reviewId'
+    });
   };
-  return Vote;
+  return VoteType;
 };

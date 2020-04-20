@@ -13,8 +13,16 @@ module.exports = (sequelize, DataTypes) => {
     Review.belongsTo(models.Business, { foreignKey: 'businessId' });
     Review.belongsTo(models.User, { foreignKey: 'userId' });
     Review.belongsTo(models.ReviewType, { foreignKey: 'typeId' });
-    Review.belongsToMany(models.VoteInstance, { foreignKey: 'reviewId' });
-    Review.belongsToMany(models.TagInstance, { foreignKey: 'reviewId' });
+    Review.belongsToMany(models.VoteType, {
+      through: models.VoteInstance,
+      foreignKey: 'reviewId',
+      otherKey: 'typeId'
+    });
+    Review.belongsToMany(models.Tag, {
+      through: models.TagInstance,
+      foreignKey: 'reviewId',
+      otherKey: 'tagId'
+    });
   };
   return Review;
 };
