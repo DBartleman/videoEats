@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: { type: DataTypes.STRING(35), allowNull: false },
     lastName: { type: DataTypes.STRING(40), allowNull: false },
     email: { type: DataTypes.STRING(35), allowNull: false, unique: true },
-    hashedPass: { type: DataTypes.STRING(255), allowNull: false },
+    hashedPass: { type: DataTypes.STRING.BINARY, allowNull: false },
     revScore: { type: DataTypes.INTEGER, allowNull: false },
     statusTypeId: { type: DataTypes.INTEGER, allowNull: false, }
   }, {});
