@@ -95,6 +95,7 @@ router.post('/:id(\\d+)/reviews',
     asyncHandler(async (req, res) => {
         const business = await Business.findByPk(req.params.id);
         const review = await Review.create({ ...req.body.review });//assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
+        console.log('review: ', review)
         res.status(201).json({
             business: {
                 id: business.id,

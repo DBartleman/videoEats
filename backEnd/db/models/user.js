@@ -24,5 +24,12 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'tagId'
     });
   };
+
+  //instance methods
+  User.prototype.validatePassword = function (password) {
+    // because this is a model instance method, `this` is the user instance here:
+    return bcrypt.compareSync(password, this.hashedPassword.toString());
+  };
+
   return User;
 };
