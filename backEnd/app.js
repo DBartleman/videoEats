@@ -17,8 +17,8 @@ app.use(cors({ origin: 'http://localhost:4000' }));//change path to host-address
 
 //mount routes
 app.use('/', indexRouter);
-app.use('/businesses', businessesRouter);
 app.use('/users', usersRouter);
+app.use('/businesses', businessesRouter);
 
 
 
