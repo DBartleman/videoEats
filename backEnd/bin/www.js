@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const { port } = require("../config");
+const { port } = require("../../config");
 
-const app = require("../app");
-const db = require("../db/models");
+const app = require("../../app");
+const db = require("../../db/models");
 
 // Check the database connection before starting the app.
 db.sequelize
