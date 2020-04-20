@@ -6,8 +6,14 @@ block content
     h2 Sign Up
     form(class="sign-up-form")
       .form-group
-        label(for='username') Username
-        input(type='text' name='username' placeholder="Username")
+        label(for='firstName') First Name
+        input(type='text' name='firstName' placeholder="First Name")
+      .form-group
+        label(for='lastName') Last Name
+        input(type='text' name='lastName' placeholder="Last Name")
+      .form-group
+        label(for='userName') Username
+        input(type='text' name='userName' placeholder="Username")
       .form-group
         label(for='email') Email address
         input(type='email', name="email", placeholder='Enter email')
@@ -16,4 +22,4 @@ block content
         input(type='password', name="password", placeholder='Password')
       button(type='submit') Sign Up
     a(href='/log-in') Already have an account? Log in here.
-  //- script(src="js/sign-up.js")
+  script(src="js/sign-up.js")
