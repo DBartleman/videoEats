@@ -26,7 +26,7 @@ module.exports = {
       },
       hashedPass: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING.BINARY
       },
       revScore: {
         allowNull: false,
