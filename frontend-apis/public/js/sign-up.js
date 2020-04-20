@@ -10,7 +10,7 @@ signUpForm.addEventListener('submit', async (e) => {
 	// Create a new formData object
 	const formData = new FormData(signUpForm);
 
-	// Use formData function to pull out data from the form submission
+	// Use formData function to pull out data from the sign up form
 	const firstName = formData.get('firstName');
 	const lastName = formData.get('lastName');
 	const email = formData.get('email');

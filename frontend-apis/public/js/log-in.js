@@ -1,8 +1,12 @@
 const logInForm = document.querySelector(".log-in-form");
 
+// set up the event listener for the submit button
 logInForm.addEventListener("submit", async (e) => {
+    // Prevent the default behavior of the submit button
     e.preventDefault();
+	// Create a new formData object
     const formData = new FormData(logInForm);
+    // Use formData function to pull out data from the log in form
     const email = formData.get("email");
     const password = formData.get("password");
     const body = { email, password };
