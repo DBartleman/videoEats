@@ -1,0 +1,19 @@
+extends layout.pug
+
+block content
+  div(class="sign-up-container")
+    div(class="errors-container")
+    h2 Sign Up
+    form(class="sign-up-form")
+      .form-group
+        label(for='username') Username
+        input(type='text' name='username' placeholder="Username")
+      .form-group
+        label(for='email') Email address
+        input(type='email', name="email", placeholder='Enter email')
+      .form-group
+        label(for='password') Password
+        input(type='password', name="password", placeholder='Password')
+      button(type='submit') Sign Up
+    a(href='/log-in') Already have an account? Log in here.
+  //- script(src="js/sign-up.js")
