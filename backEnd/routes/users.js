@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const { User, Review, StatusType } = require('../db/models');
 const { getUserToken, requireAuth } = require('../utils/auth.js');
 
+//validate Password
 const router = express.Router();
 
 const validateUsername =

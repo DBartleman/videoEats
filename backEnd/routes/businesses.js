@@ -3,19 +3,22 @@ const { asyncHandler, handleValidationErrors } = require('../utils/utils');
 const { Business, Review } = require('../db/models');
 const { requireAuth } = require('../utils/auth.js');
 
+
+
 const router = express.Router();
+
 
 //Will need route auths for user actions
 //multi-roles; user/owner
 
 //routes
 
-//create a new business entity for the database
+//create a new business entity for the database **Functioning 4.20.20**
 router.post(
     '/',
     //business-specific validation???
     handleValidationErrors,
-    requireAuth,
+    //requireAuth, removed for testing on Postman
     asyncHandler(async (req, res) => {
         const business = await Business.create({ ...req.body });
         res.status(201).json({
@@ -35,7 +38,7 @@ router.post(
     })
 );
 
-//returns specific business resource
+//returns specific business resource **Functioning 4.20.20**
 router.get('/:id', asyncHandler(async (req, res) => {
     const business = await Business.findByPk(req.params.id);
     res.json({
@@ -50,12 +53,50 @@ router.get('/:id', asyncHandler(async (req, res) => {
     })
 }))
 
-//updates specific business resource
-router.put('/:id', requireAuth, asyncHandler(async (req, res) => {
-    const business = Business.findByPk(req.params.id);
-    if (business) {
-        business.update({ ...req.body });
-        res.json({
+//updates specific business resource **Functioning 4.20.20**
+router.put('/:id',
+    //requireAuth, removed for postman testing
+    asyncHandler(async (req, res) => {
+        const business = await Business.findByPk(req.params.id);
+        if (business) {
+            await business.update({ ...req.body });
+            res.json({
+                business: {
+                    id: business.id,
+                    name: business.name,
+                    address: business.address,
+                    phoneNum: business.phoneNum,
+                    hours: business.hours,
+                    description: business.description
+                }
+            });
+        } else {
+            const err = new Error();
+            err.title = "User Not Found";
+            err.status = 404
+            next(err);
+        }
+    }));
+
+//deletes a specified business **Functioning 4.20.20**
+router.delete('/:id(\\d+)',
+    //requireAuth, removed for postman testing
+    asyncHandler(async (req, res, next) => {
+        const business = await Business.findByPk(req.params.id, {
+            attributes: ['id']
+        });
+        await business.destroy();
+        res.end();
+    }));
+
+//create a new review for specified business
+router.post('/:id(\\d+)/reviews',
+    //requireAuth, removed for postman testing
+    asyncHandler(async (req, res) => {
+        const business = await Business.findByPk(req.params.id);
+        const review = await Review.create({ ...req.body.review });//assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
+        console.log('review: ', review)
+        res.status(201).json({
             business: {
                 id: business.id,
                 name: business.name,
@@ -63,47 +104,11 @@ router.put('/:id', requireAuth, asyncHandler(async (req, res) => {
                 phoneNum: business.phoneNum,
                 hours: business.hours,
                 description: business.description
-            }
+            },
+            review: { ...review }
         });
-    } else {
-        const err = new Error();
-        err.title = "User Not Found";
-        err.status = 404
-        next(err);
-    }
-}));
-
-//deletes a specified business
-router.delete('/:id(\\d+)', requireAuth, asyncHandler(async (req, res, next) => {
-    const business = await Business.findByPk(req.params.id, {
-        attributes: ['id']
-    });
-    await business.destroy();
-    res.end();
-}));
-
-// router.post('/token',
-//     validateEmailAndPassword,
-//     asyncHandler(async (req, res, next) => {
-//         const { email, password } = req.body;
-//         const user = await User.findOne({
-//             where: {
-//                 email,
-//             },
-//         });
-//         //todo pass validate and error handling
-//         if (!user || !user.validatePassword(password)) {
-//             const err = new Error("Login failed");
-//             err.status = 401;
-//             err.title = "Login failed";
-//             err.errors = ["The provided credentials were invalid."];
-//             return next(err);
-//         }
-//         //todo token gen
-//         const token = getUserToken(user);
-//         res.json({ token, user: { id: user.id } });
-//     })
-// )
+    })
+)
 
 //get all reviews for specified business
 //unfinished 4.19.20
