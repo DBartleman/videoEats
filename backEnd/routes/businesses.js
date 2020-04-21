@@ -1,6 +1,6 @@
 const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
-const { Business, Review } = require('../db/models');
+const { Business, Review, Tag, TagInstance } = require('../db/models');
 const { requireAuth } = require('../utils/auth.js');
 
 
@@ -47,7 +47,7 @@ router.get('/', asyncHandler(async (req, res) => {
 }))
 
 //returns specific business resource **Functioning 4.20.20**
-router.get('/:id', asyncHandler(async (req, res) => {
+router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
     const business = await Business.findByPk(req.params.id);
     res.json({
         business: {
@@ -62,7 +62,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }))
 
 //updates specific business resource **Functioning 4.20.20**
-router.put('/:id',
+router.put('/:id(\\d+)',
     //requireAuth, removed for postman testing
     asyncHandler(async (req, res) => {
         const business = await Business.findByPk(req.params.id);
@@ -97,7 +97,8 @@ router.delete('/:id(\\d+)',
         res.end();
     }));
 
-//review-based routes
+//review-based routes**************************************************
+
 //create a new review for specified business **Functioning 4.20.20**
 router.post('/:id(\\d+)/reviews',
     //requireAuth, removed for postman testing
@@ -197,5 +198,23 @@ router.delete('/:biz_id(\\d+)/reviews/:id(\\d+)',
         await review.destroy();
         res.end();
     }));
+
+//**************** Tag-Based Routes ****************************/
+
+//get all searchable tags (for drop-down search/filter)
+//**functioning 4.21.20 */
+router.get('/tags', asyncHandler(async (req, res) => {
+    const tags = await TagInstance.findAll({ attributes: ['id', 'type'] });
+    res.json({ tags });
+}))
+
+//get all tags for specified business
+//**functioning 4.21.20 */
+router.get('/:id(\\d+)/tags', asyncHandler(async (req, res) => {
+    const tags = await TagInstance.findAll({
+        where: { businessId: req.params.id }
+    });
+    res.json({ tags });
+}))
 
 module.exports = router;
