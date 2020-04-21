@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const Business = require('../backEnd/db/models');
 
 // Create the express app
 const app = express();
@@ -10,15 +11,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Defining the routes
 app.get('/', (req, res) => {
-	res.render('index');
+	res.render('index', { title: 'Home' });
 });
 
 app.get('/sign-up', (req, res) => {
-	res.render('sign-up');
+	res.render('sign-up', { title: 'Sign Up' });
 });
 
 app.get('/log-in', (req, res) => {
-	res.render('log-in');
+	res.render('log-in', { title: 'Log In' });
+});
+
+app.get(`/businesses/:id`, (req, res) => {
+	res.render('business');
 });
 
 // Defining the port
