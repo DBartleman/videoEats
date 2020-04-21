@@ -80,7 +80,7 @@ router.put('/:id',
             });
         } else {
             const err = new Error();
-            err.title = "User Not Found";
+            err.title = "Business Not Found";
             err.status = 404
             next(err);
         }
@@ -89,7 +89,7 @@ router.put('/:id',
 //deletes a specified business **Functioning 4.20.20**
 router.delete('/:id(\\d+)',
     //requireAuth, removed for postman testing
-    asyncHandler(async (req, res, next) => {
+    asyncHandler(async (req, res) => {
         const business = await Business.findByPk(req.params.id, {
             attributes: ['id']
         });
@@ -148,10 +148,54 @@ router.get('/:id(\\d+)/reviews',
     }))
 
 //* GET /businesses/:biz_id/reviews/:id - returns a given review
-// router.get('/:biz_id(\\d+)/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
-//     console.log('reqParams: ', req.params);
-// })) {
-//     console.log(req.params)
-// }
+//**functioning 4.21.20**
+router.get('/:biz_id(\\d+)/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
+    const review = await Review.findByPk(req.params.id, {
+        include: [{//do we need to include any specific attributes? Include may be unnecessary.
+            model: Business,
+            attributes: ['id']
+        }]
+    })
+    res.json({
+        review,
+        business: { id: req.params.biz_id }//currently redundant with include from 153. Evaluate which is better. 
+    })
+}));
+
+//* PUT /businesses/:biz_id/reviews/:id - updates a given review
+//**functioning 4.21.20**
+router.put('/:biz_id(\\d+)/reviews/:id(\\d+)',
+    //requireAuth, removed for postman testing
+    asyncHandler(async (req, res) => {
+        const review = await Review.findByPk(req.params.id);
+        if (review) {
+            await review.update({ ...req.body.review });//assumes req body has nested review object
+            res.json({
+                review: {
+                    id: review.id,
+                    upVoteCount: review.upVoteCount,
+                    downVoteCount: review.downVoteCount,
+                    videoLink: review.videoLink,
+                    reviewText: review.reviewText
+                }
+            });
+        } else {
+            const err = new Error();
+            err.title = "Review Not Found";
+            err.status = 404
+            next(err);
+        }
+    }));
+
+//deletes a specified review **Functioning 4.21.20**
+router.delete('/:biz_id(\\d+)/reviews/:id(\\d+)',
+    //requireAuth, removed for postman testing
+    asyncHandler(async (req, res) => {
+        const review = await Review.findByPk(req.params.id, {
+            attributes: ['id']
+        });
+        await review.destroy();
+        res.end();
+    }));
 
 module.exports = router;
