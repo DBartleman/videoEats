@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		// destructure to get the reviews array of objects
 		const { reviews } = await res.json();
-		console.log(reviews);
 
 		// render the reviews
 		const reviewSection = document.querySelector('.review-section');
@@ -20,11 +19,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 			<div class="card mt-2" id="review-${review.id}">
 				<div class="card-body">
 					<p class="card-text">${review.reviewText}</p>
-					<p class="card-text">${review.userId}</p>
+					<p class="card-text">${review.userId.userName}</p>
 				</div>
 			</div>
 		`
 		);
+		// TODO: Ask Will to change some of the backend settings for createdAt so that it only shows the MM/DD/YYYY
 
 		reviewSection.innerHTML = reviewCardsHTML.join('');
 	} catch (err) {
