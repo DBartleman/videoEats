@@ -1,6 +1,6 @@
 const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
-const { Business, Review, Tag, TagInstance } = require('../db/models');
+const { Business, Review, Tag, TagInstance, User } = require('../db/models');
 const { requireAuth } = require('../utils/auth.js');
 
 
@@ -138,14 +138,11 @@ router.get('/:id(\\d+)/reviews',
             //include a bunch of tag/biz/user attributes as required by client
             //include: []
             include: [{
-                model: Business,
+                model: User,
                 attributes: ['id']
             }]
         });
-        res.json({
-            reviews,
-            business: { id: req.params.id }
-        });
+        res.json({ reviews });
     }))
 
 //* GET /businesses/:biz_id/reviews/:id - returns a given review
@@ -153,14 +150,11 @@ router.get('/:id(\\d+)/reviews',
 router.get('/:biz_id(\\d+)/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
     const review = await Review.findByPk(req.params.id, {
         include: [{//do we need to include any specific attributes? Include may be unnecessary.
-            model: Business,
+            model: User,
             attributes: ['id']
         }]
     })
-    res.json({
-        review,
-        business: { id: req.params.biz_id }//currently redundant with include from 153. Evaluate which is better. 
-    })
+    res.json({ review });
 }));
 
 //* PUT /businesses/:biz_id/reviews/:id - updates a given review
