@@ -3,14 +3,16 @@ extends layout.pug
 block content
   div(class="log-in-container")
     div(class="errors-container")
-    h2 Log In
+    h1 Log In
     form(class="log-in-form")
       .form-group
-        label(for='email') Email address
-        input(type='email', name="email", placeholder='Enter email')
+        input(type='email', name="email", placeholder='Enter email' class="form-control")
       .form-group
-        label(for='password') Password
-        input(type='password', name="password", placeholder='Password')
-      button(type='submit') Log In
-    a(href='/sign-up') Don't have an account? Sign up here.
-  script(src="js/log-in.js")
+        input(type='password', name="password", placeholder='Password' class="form-control")
+      div
+        button(type='submit' class="btn btn-primary") Log In
+        a(href="/" class="ml-2") Cancel
+      a(href='/sign-up') Don't have an account? Sign up here.
+    div(class="image-container")
+      img(src="/images/sign-up-image.jpg")
+  script(src="/js/log-in.js")
