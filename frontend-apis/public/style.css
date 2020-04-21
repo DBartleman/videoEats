@@ -1,6 +1,5 @@
-body {
-	padding-left: 40px;
-	padding-right: 40px;
+.body-content {
+	padding: 40px;
 }
 
 /* Sign up form styles */
@@ -21,7 +20,7 @@ body {
 	grid-column: 1 / span 1;
 }
 
-.sign-up-image-container {
+.image-container {
 	grid-column: 2 / span 1;
 	width: 350px;
 	height: 350px;
@@ -31,7 +30,25 @@ body {
 	margin: 0 auto;
 }
 
-.sign-up-image-container img {
+.image-container img {
 	width: auto;
 	height: 100%;
+}
+
+/* Log in form styles */
+.log-in-container {
+	margin: 0 auto;
+	width: 800px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.log-in-form {
+	grid-column: 1 / span 1;
+}
+
+.log-in-container > h1 {
+	text-align: center;
+	padding: 10px;
+	grid-column: 1 / span 1;
 }
