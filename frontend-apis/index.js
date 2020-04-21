@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const Business = require('../backEnd/db/models');
+const fetch = require('node-fetch');
 
 // Create the express app
 const app = express();
@@ -22,8 +22,14 @@ app.get('/log-in', (req, res) => {
 	res.render('log-in', { title: 'Log In' });
 });
 
-app.get(`/businesses/:id`, (req, res) => {
-	res.render('business');
+app.get(`/businesses/:id`, async (req, res) => {
+	try {
+		const fetchBusiness = await fetch(`http://localhost:8080/businesses/${req.params.id}`);
+		const { business } = await fetchBusiness.json();
+		res.render('business', { title: business.name, business });
+	} catch (err) {
+		console.error(err);
+	}
 });
 
 // Defining the port

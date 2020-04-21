@@ -1,5 +1,12 @@
 extends layout.pug
 
 block content
-  .business-container
-  script(src="/js/business.js")
+    //- Need some kind of phone wrapper logic
+    .photo-wrapper
+    h1 #{business.name}
+    div
+        p #{business.phoneNum}
+        p #{business.description}
+    .address
+        p #{business.address}
+    //- review section
