@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 			<div class="card mt-2" id="review-${review.id}">
 				<div class="card-body">
 					<p class="card-text">${review.reviewText}</p>
-					<p class="card-text">${review.userId.userName}</p>
+					<p class="card-text">${review.User.userName}</p>
+					<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 				</div>
 			</div>
 		`
