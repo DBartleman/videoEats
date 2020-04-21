@@ -1,3 +1,36 @@
 body {
 	padding: 40px;
 }
+
+/* Sign up form styles */
+.sign-up-container {
+	margin: 0 auto;
+	width: 800px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.sign-up-form {
+	grid-column: 1 / span 1;
+}
+
+.sign-up-container > h1 {
+	text-align: center;
+	padding: 10px;
+	grid-column: 1 / span 1;
+}
+
+.sign-up-image-container {
+	grid-column: 2 / span 1;
+	width: 350px;
+	height: 350px;
+	border-radius: 50%;
+	overflow: hidden;
+	position: relative;
+	margin: 0 auto;
+}
+
+.sign-up-image-container img {
+	width: auto;
+	height: 100%;
+}

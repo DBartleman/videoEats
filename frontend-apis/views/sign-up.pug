@@ -3,23 +3,22 @@ extends layout.pug
 block content
   div(class="sign-up-container")
     div(class="errors-container")
-    h2 Sign Up
+    h1 Sign Up for VideoEats
     form(class="sign-up-form")
       .form-group
-        label(for='firstName') First Name
-        input(type='text' name='firstName' placeholder="First Name")
+        input(type='text' name='firstName' placeholder="First Name" class="form-control")
       .form-group
-        label(for='lastName') Last Name
-        input(type='text' name='lastName' placeholder="Last Name")
+        input(type='text' name='lastName' placeholder="Last Name" class="form-control")
       .form-group
-        label(for='userName') Username
-        input(type='text' name='userName' placeholder="Username")
+        input(type='text' name='userName' placeholder="Username" class="form-control")
       .form-group
-        label(for='email') Email address
-        input(type='email', name="email", placeholder='Enter email')
+        input(type='email', name="email", placeholder='Enter email' class="form-control")
       .form-group
-        label(for='password') Password
-        input(type='password', name="password", placeholder='Password')
-      button(type='submit') Sign Up
-    a(href='/log-in') Already have an account? Log in here.
+        input(type='password', name="password", placeholder='Password' class="form-control")
+      div
+        button(type='submit' class="btn btn-primary") Sign Up
+        a(href="/" class="ml-2") Cancel
+      a(href='/log-in' class="mt-2") Already have an account? Log in here.
+    div(class="sign-up-image-container")
+      img(src="/images/sign-up-image.jpg")
   script(src="js/sign-up.js")

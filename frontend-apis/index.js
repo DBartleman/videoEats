@@ -32,6 +32,10 @@ app.get(`/businesses/:id`, async (req, res) => {
 	}
 });
 
+app.get('/businesses/search/?=', (req, res) => {
+	res.render('search');
+});
+
 // Defining the port
 const port = 4000;
 
