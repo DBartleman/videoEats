@@ -19,8 +19,8 @@
 ## **Tags**
  
 * POST /businesses/:biz_id/tags - creates a new tag object and attaches it to specified business
-* GET /businesses/tags - returns all existing tag options
-* GET /businesses/:biz_id/tags/ - returns all tags for specified busienss
+* GET /businesses/tags - returns all existing tag options ***-- functioning 4.21.20***
+* GET /businesses/:biz_id/tags/ - returns all tags for specified busienss ***-- functioning 4.21.20***
 * PUT /businesses/:biz_id/tags/:id - updates a given tag
 * DELETE /businesses/:biz_id/tags/:id - deletes a given tag for specified business
  
