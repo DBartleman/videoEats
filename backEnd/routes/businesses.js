@@ -97,6 +97,7 @@ router.delete('/:id(\\d+)',
         res.end();
     }));
 
+//review-based routes
 //create a new review for specified business **Functioning 4.20.20**
 router.post('/:id(\\d+)/reviews',
     //requireAuth, removed for postman testing
@@ -127,20 +128,30 @@ router.post('/:id(\\d+)/reviews',
 )
 
 //get all reviews for specified business
-//unfinished 4.19.20
-router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
-    const businessId = req.params.id;
-    const reviews = await Review.findAll({
-        where: {
-            businessId: businessId,
+//**functioning 4.20.20**
+router.get('/:id(\\d+)/reviews',
+    //requireAuth, taken out for simple postman tests
+    asyncHandler(async (req, res) => {
+        const reviews = await Review.findAll({
+            where: { businessId: req.params.id },
             //include a bunch of tag/biz/user attributes as required by client
             //include: []
-        }
-    });
-    res.json({
-        reviews,
-        business: { id: business.id }
-    });
-}))
+            include: [{
+                model: Business,
+                attributes: ['id']
+            }]
+        });
+        res.json({
+            reviews,
+            business: { id: req.params.id }
+        });
+    }))
+
+//* GET /businesses/:biz_id/reviews/:id - returns a given review
+// router.get('/:biz_id(\\d+)/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
+//     console.log('reqParams: ', req.params);
+// })) {
+//     console.log(req.params)
+// }
 
 module.exports = router;
