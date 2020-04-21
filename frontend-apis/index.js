@@ -32,6 +32,10 @@ app.get(`/businesses/:id`, async (req, res) => {
 	}
 });
 
+app.get('/write-a-review', (req, res) => {
+	res.render('write-a-review');
+});
+
 app.get('/businesses/search/?=', (req, res) => {
 	res.render('search');
 });
