@@ -50,11 +50,12 @@ signUpForm.addEventListener('submit', async (e) => {
 			];
 
 			const { errors } = errorJSON;
+			console.log(errors);
 			if (errors && Array.isArray(errors)) {
 				errorsHtml = errors.map(
 					(message) => `
                     <div class="alert alert-danger">
-                        ${message.message}
+                        ${message}
                     </div>
                     `
 				);
