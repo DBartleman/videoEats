@@ -33,7 +33,7 @@ app.get(`/businesses/:id`, async (req, res) => {
 });
 
 app.get('/write-a-review', (req, res) => {
-	res.render('write-a-review');
+	res.render('write-a-review', { title: 'Write a Review' });
 });
 
 app.get('/businesses/search/?=', (req, res) => {
