@@ -38,6 +38,14 @@ router.post(
     })
 );
 
+//returns all business in the database
+router.get('/', asyncHandler(async (req, res) => {
+    const businesses = await Business.findAll({
+        attributes: ['name', 'address', 'phoneNum', 'hours']
+    });
+    res.json({ businesses });
+}))
+
 //returns specific business resource **Functioning 4.20.20**
 router.get('/:id', asyncHandler(async (req, res) => {
     const business = await Business.findByPk(req.params.id);
@@ -89,11 +97,14 @@ router.delete('/:id(\\d+)',
         res.end();
     }));
 
-//create a new review for specified business
+//create a new review for specified business **Functioning 4.20.20**
 router.post('/:id(\\d+)/reviews',
     //requireAuth, removed for postman testing
     asyncHandler(async (req, res) => {
         const business = await Business.findByPk(req.params.id);
+        console.log("business: ", business);
+        console.log('id:', business.id);
+        console.log('dataValues.id: ', business.dataValues.id)
         const review = await Review.create({ ...req.body.review });//assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
         console.log('review: ', review)
         res.status(201).json({
@@ -105,7 +116,12 @@ router.post('/:id(\\d+)/reviews',
                 hours: business.hours,
                 description: business.description
             },
-            review: { ...review }
+            review: {
+                id: review.id,
+                upVoteCount: review.upVoteCount,
+                downVoteCount: review.downVoteCount,
+                reviewText: review.reviewText
+            }
         });
     })
 )
@@ -113,12 +129,12 @@ router.post('/:id(\\d+)/reviews',
 //get all reviews for specified business
 //unfinished 4.19.20
 router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
-    const businessesId = req.params.id;
+    const businessId = req.params.id;
     const reviews = await Review.findAll({
         where: {
             businessId: businessId,
             //include a bunch of tag/biz/user attributes as required by client
-            include: []
+            //include: []
         }
     });
     res.json({
