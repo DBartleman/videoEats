@@ -1,10 +1,8 @@
 doctype html
 html
   head
-    title Video Eats
-    meta(charset='utf-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-    link(rel="stylesheet" type="text/css" href="style.css")
+    title VideoEats - #{title}
+    link(rel="stylesheet" type="text/css" href="/style.css")
     link(href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh", crossorigin="anonymous")
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
@@ -33,8 +31,9 @@ html
           //-li.nav-item
             a.nav-link.disabled(href='#') Disabled
         form.form-inline.my-2.my-lg-0
-          input.form-control.mr-sm-2.navbar_search(type='search' placeholder='Search by restaurant, food, location...' aria-label='Search')
+          input.form-control.mr-sm-2.navbar-search(type='search' placeholder='Search by restaurant, food, location...' aria-label='Search')
           button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
           //- TODO: alter search route to be something like /search/?= once we implement /search
-    script(src="js/navbar-search.js")
-    block content
+    .body-content
+      block content
+    script(src="/js/navbar-search.js")

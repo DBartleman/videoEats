@@ -1,0 +1,15 @@
+extends layout.pug
+
+block content
+    div(class="container")
+        //- Need some kind of photo wrapper logic
+        .photo-wrapper
+        .container-md
+            h1 #{business.name}
+            div
+                p #{business.phoneNum}
+                p #{business.description}
+            .address
+                p #{business.address}
+        .review-section
+    script(src="/js/business.js")
