@@ -114,13 +114,14 @@ router.post('/token', validateEmailAndPassword, asyncHandler(async (req, res, ne
 }));
 
 //get all reviews for specific user
-//unfinished****(4.19.20)
-router.get('/:id/reviews', requireAuth, asyncHandler(async (req, res) => {
-    const userId = req.params.id;
-    const reviews = await Review.findAll({
-        where: { userId: userId }
-    });
-    res.json({ reviews });
-}))
+//functioning 4.21.20
+router.get('/:id(\\d+)/reviews',
+    //requireAuth, 
+    asyncHandler(async (req, res) => {
+        const reviews = await Review.findAll({
+            where: { userId: req.params.id }
+        });
+        res.json({ reviews });
+    }))
 
 module.exports = router;
