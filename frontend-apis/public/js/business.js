@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 			</div>
 		`
 		);
-		// TODO: Ask Will to change some of the backend settings for createdAt so that it only shows the MM/DD/YYYY
-
 		reviewSection.innerHTML = reviewCardsHTML.join('');
 	} catch (err) {
 		console.error(err);
