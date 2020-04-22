@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'reviewId',
       otherKey: 'typeId'
     });
-    Review.belongsToMany(models.Tag, {
-      through: models.TagInstance,
-      foreignKey: 'reviewId',
-      otherKey: 'tagId'
-    });
+    // Review.belongsToMany(models.Tag, {
+    //   through: models.TagInstance,
+    //   foreignKey: 'reviewId',
+    //   otherKey: 'tagId'
+    // });
   };
   return Review;
 };
