@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 			review: {
 				businessId: id,
 				reviewText,
-				userId: 1,
+				userId: localStorage.getItem('VIDEO_EATS_CURRENT_USER_ID'),
 				typeId: 2,
 				upVoteCount: 0,
 				downVoteCount: 0,
