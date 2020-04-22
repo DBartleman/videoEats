@@ -1,0 +1,21 @@
+
+//- this file hosts the google map that will be 
+//- embedded in the search results page and possibly business page
+
+//- note: this weirdly formatted page is what an html-to-pug generator gave me, 
+//- and it appears to be valid pug html??
+
+//- center is currently san fran, can change to a variable later on 
+
+#map
+style.
+#map { height: 100%; }
+script.
+let map;
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+center: {lat: 37.774, lng: 122.419},
+zoom: 8
+});
+}
+script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_API_KEY}&callback=initMap` async='' defer='')
