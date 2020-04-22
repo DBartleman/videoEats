@@ -21,8 +21,8 @@
 * POST /businesses/:biz_id/reviews/:id/tags - creates a new tag object and attaches it to specified review
 * GET /businesses/tags - returns all existing tag options ***-- functioning 4.21.20***
 * GET /businesses/:biz_id/tags/ - returns all tags for specified business ***-- functioning 4.21.20*** (change to top 'x' tags?)
-* PUT /businesses/:biz_id/tags/:id - updates a given tag
-* DELETE /businesses/:biz_id/tags/:id - deletes a given tag for specified business
+* PUT /businesses/:biz_id/tags/:id - updates a given tag instance
+* DELETE /businesses/reviews/tags/:id - deletes a given tag instance for specified business
  
 ## **Users**
  
