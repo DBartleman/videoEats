@@ -1,10 +1,34 @@
 const reviewForm = document.querySelector('.create-review');
+const businessSearch = document.getElementById('businessName');
 
 reviewForm.addEventListener('submit', async (e) => {
 	// prevents the default of the submit button
 	e.preventDefault();
 
+	// Declare varibles to store and be parsed as a post method for the buisness
+	const formData = new FormData(reviewForm);
+	const businessName = formData.get('businessName');
+	const reviewText = formData.get('reviewText');
+	// const bizRatings = formData.get('bizRatings');
+	const body = { businessName, reviewText };
+
+	// TODO: Create the event listener keyup for the business name search. this is a stretch goal.
+
+	// Need to somehow get the id
 	try {
+		const res = await fetch('http://localhost:8080/businesses/:id/reviews', {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `${localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN')}`
+			}
+		});
+		if (!res.ok) {
+			throw res;
+		}
+
+		window.location.href = '/businesses/:id';
 	} catch (err) {
 		if (err.status === 401) {
 			window.location.href = '/log-in';

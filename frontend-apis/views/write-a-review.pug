@@ -3,12 +3,14 @@ extends layout.pug
 block content
     .form-container
         .errors-container
-        h1 Write a Review
+        h1 Write a Review for #{business.name}
         form.create-review
-            .form-group
-                input(type="text" placeholder="Business Name" class="form-control" required)
+            //- Will come back to this as a stretch goal
+            //- .form-group
+            //-     input(type="text" name="businessName" id="businessName" placeholder="Business Name" class="form-control" required)
             .form-group
                 textarea(name="reviewText" rows="10" placeholder="Write your review here!" class="form-control" required)
+            //- TODO: Create a ratings
             div
                 button(type="submit" class="btn btn-primary") Post Review
                 a(href="/" class="ml-2") Cancel

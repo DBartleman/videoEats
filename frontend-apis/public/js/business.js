@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const urlSplit = url.split('/');
 	const id = urlSplit[urlSplit.length - 1];
 
+	// Handling the click event for write a review
+	const writeReview = document.getElementById('write-a-review-button');
+	writeReview.addEventListener('click', () => {
+		location.href = url + '/write-a-review';
+	});
+
 	try {
 		// get a fetch request to the backend api for reviews
 		const res = await fetch(`http://localhost:8080/businesses/${id}/reviews`);
@@ -11,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// destructure to get the reviews array of objects
 		const { reviews } = await res.json();
 
-		// render the reviews
+		// render the reviews in cards
 		const reviewSection = document.querySelector('.review-section');
 
 		const reviewCardsHTML = reviews.map(
