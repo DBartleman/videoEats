@@ -46,6 +46,10 @@ module.exports = {
       reviewText: {
         type: Sequelize.TEXT
       },
+      businessRating: {
+        allowNull: false,
+        type: Sequelize.STRING(3)
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

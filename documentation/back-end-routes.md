@@ -18,7 +18,7 @@
  
 ## **Tags**
  
-* POST /businesses/:biz_id/tags - creates a new tag object and attaches it to specified business
+* POST /businesses/:biz_id/reviews/:id/tags - creates a new tag object and attaches it to specified review
 * GET /businesses/tags - returns all existing tag options ***-- functioning 4.21.20***
 * GET /businesses/:biz_id/tags/ - returns all tags for specified busienss ***-- functioning 4.21.20***
 * PUT /businesses/:biz_id/tags/:id - updates a given tag
