@@ -119,7 +119,8 @@ router.get('/:id(\\d+)/reviews',
     //requireAuth, 
     asyncHandler(async (req, res) => {
         const reviews = await Review.findAll({
-            where: { userId: req.params.id }
+            where: { userId: req.params.id },
+            order: [['createdAt', 'DESC']]
         });
         res.json({ reviews });
     }))
