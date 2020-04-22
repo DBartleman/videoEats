@@ -40,7 +40,7 @@ router.get(
 	'/',
 	asyncHandler(async (req, res) => {
 		const businesses = await Business.findAll({
-			attributes: [ 'name', 'address', 'phoneNum', 'hours' ]
+			attributes: ['name', 'address', 'phoneNum', 'hours']
 		});
 		res.json({ businesses });
 	})
@@ -97,7 +97,7 @@ router.delete(
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id, {
-			attributes: [ 'id' ]
+			attributes: ['id']
 		});
 		await business.destroy();
 		res.end();
@@ -112,11 +112,7 @@ router.post(
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id);
-		console.log('business: ', business);
-		console.log('id:', business.id);
-		console.log('dataValues.id: ', business.dataValues.id);
 		const review = await Review.create({ ...req.body.review }); //assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
-		console.log('review: ', review);
 		res.status(201).json({
 			business: {
 				id: business.id,
@@ -149,7 +145,7 @@ router.get(
 			include: [
 				{
 					model: User,
-					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
+					attributes: ['id', 'userName', 'firstName', 'lastName']
 				}
 			]
 		});
@@ -167,7 +163,7 @@ router.get(
 				{
 					//do we need to include any specific attributes? Include may be unnecessary.
 					model: User,
-					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
+					attributes: ['id', 'userName', 'firstName', 'lastName']
 				}
 			]
 		});
@@ -208,7 +204,7 @@ router.delete(
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
-			attributes: [ 'id' ]
+			attributes: ['id']
 		});
 		await review.destroy();
 		res.end();
@@ -222,7 +218,7 @@ router.delete(
 router.get(
 	'/tags',
 	asyncHandler(async (req, res) => {
-		const tags = await TagInstance.findAll({ attributes: [ 'id', 'type' ] });
+		const tags = await TagInstance.findAll({ attributes: ['id', 'type'] });
 		res.json({ tags });
 	})
 );
@@ -242,18 +238,18 @@ router.get(
 //POST /businesses/:biz_id/reviews/:id/tags
 //create new tag and attach to specified review
 router.post('/businesses/:biz_id/reviews/:id/tags',
-    //requireAuth
-    asyncHandler(async (req, res) => {
-        //get review
-        //add tag
-        const tagInstance = await TagInstance.create({
-            businessId: biz_id,
-            reviewId: id,
-            userId: req.body.userId,
-            tagId: req.body.tagId//assumes tag already exists
-        });
-        res.json({ tagInstance });
-    })
+	//requireAuth
+	asyncHandler(async (req, res) => {
+		//get review
+		//add tag
+		const tagInstance = await TagInstance.create({
+			businessId: biz_id,
+			reviewId: id,
+			userId: req.body.userId,
+			tagId: req.body.tagId//assumes tag already exists
+		});
+		res.json({ tagInstance });
+	})
 )
 
 module.exports = router;
