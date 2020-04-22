@@ -6,9 +6,9 @@ block content
         h1 Write a Review
         form.create-review
             .form-group
-                input(type="text" placeholder="Business Name" class="form-control")
+                input(type="text" placeholder="Business Name" class="form-control" required)
             .form-group
-                textarea(name="reviewText" rows="10" placeholder="Write your review here!" class="form-control")
+                textarea(name="reviewText" rows="10" placeholder="Write your review here!" class="form-control" required)
             div
                 button(type="submit" class="btn btn-primary") Post Review
                 a(href="/" class="ml-2") Cancel
