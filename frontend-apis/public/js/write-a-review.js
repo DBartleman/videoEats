@@ -8,13 +8,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const urlSplit = url.split('/');
 	const id = urlSplit[4];
 
+	// Handling the click event for cancel
+	const cancelReview = document.getElementById('reivew-cancel-button');
+	cancelReview.addEventListener('click', () => {
+		location.href = `/businesses/${id}`;
+	});
+
 	reviewForm.addEventListener('submit', async (e) => {
 		// prevents the default of the submit button
 		e.preventDefault();
 
 		// Declare varibles to store and be parsed as a post method for the buisness
 		const formData = new FormData(reviewForm);
-		// const businessName = formData.get('businessName');
 		const reviewText = formData.get('reviewText');
 		// const bizRatings = formData.get('bizRatings');
 		const body = {
