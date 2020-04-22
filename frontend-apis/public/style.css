@@ -71,7 +71,6 @@
 }
 .star::before {
 	content: '\2606'; /* star outline*/
-	cursor: pointer;
 }
 /*styles for the selected start*/
 .star.rated::before {
@@ -84,5 +83,26 @@
 	font-weight: 900;
 }
 .star.rated {
+	counter-increment: 1; /*Increment the counter by 1*/
+}
+
+.business-star {
+	color: red;
+	font-size: 2.0rem;
+	padding: 0 1rem;
+}
+.business-star::before {
+	content: '\2606'; /* star outline*/
+}
+/*styles for the selected start*/
+.business-star.rated::before {
+	content: '\2605'; /*filled star*/
+}
+.stars-business {
+	counter-reset: 0; /* resets the counter to be 0*/
+	font-size: 2.0rem;
+	font-weight: 900;
+}
+.business-star.rated {
 	counter-increment: 1; /*Increment the counter by 1*/
 }
