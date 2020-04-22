@@ -1,5 +1,5 @@
 const navbarSearch = document.querySelector('.navbar-search');
-
+console.log(navbarSearch);
 // set up the event listener for the submit button
 navbarSearch.addEventListener('submit', async (e) => {
 	// Prevent the default behavior of the submit button
