@@ -107,11 +107,7 @@ router.post(
     //requireAuth, removed for postman testing
     asyncHandler(async (req, res) => {
         const business = await Business.findByPk(req.params.id);
-        console.log('business: ', business);
-        console.log('id:', business.id);
-        console.log('dataValues.id: ', business.dataValues.id);
         const review = await Review.create({ ...req.body.review }); //assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
-        console.log('review: ', review);
         res.status(201).json({
             business: {
                 id: business.id,
