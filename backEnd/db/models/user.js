@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       otherKey: 'typeId'
     });
-    User.belongsToMany(models.Tag, {
-      through: models.TagInstance,
-      foreignKey: 'userId',
-      otherKey: 'tagId'
-    });
+    // User.belongsToMany(models.Tag, {
+    //   through: models.TagInstance,
+    //   foreignKey: 'userId',
+    //   otherKey: 'tagId'
+    // });
   };
 
   //instance methods

@@ -147,7 +147,8 @@ router.get(
 					model: User,
 					attributes: ['id', 'userName', 'firstName', 'lastName']
 				}
-			]
+			],
+			order: [['createdAt', 'DESC']]
 		});
 		res.json({ reviews });
 	})
@@ -237,19 +238,94 @@ router.get(
 
 //POST /businesses/:biz_id/reviews/:id/tags
 //create new tag and attach to specified review
-router.post('/businesses/:biz_id/reviews/:id/tags',
+//functioning 4.22.20
+router.post('/:biz_id/reviews/:id/tags',
 	//requireAuth
 	asyncHandler(async (req, res) => {
 		//get review
 		//add tag
+
+		//assume req.body has "tag" key with text-value of target tag
+		const { tag, userId } = req.body;
+		//check database for tag, make it if it's new
+		const [tagType, _created] = await Tag.findOrCreate({
+			where: { type: tag }
+		});
+
 		const tagInstance = await TagInstance.create({
-			businessId: biz_id,
-			reviewId: id,
-			userId: req.body.userId,
-			tagId: req.body.tagId//assumes tag already exists
+			businessId: req.params.biz_id,
+			reviewId: req.params.id,
+			userId,
+			tagId: tagType.id
 		});
 		res.json({ tagInstance });
 	})
 )
+
+//update a tag instance (not sure we need this endpoint)
+//same as delete (below), except we also pull out tagId from req.body
+//functioning 4.22.20
+router.put('/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
+	//requireAuth
+	asyncHandler(async (req, res, next) => {
+		//assumes userId, businessId and reviewId passed in request
+		const { userId, businessId } = req.body.tagInstance;
+
+		const tagInstance = await TagInstance.findOne({
+			where: {
+				reviewId: req.params.rev_Id,
+				businessId,
+				userId,
+				tagId: req.params.id
+				//$and: [{ businessId }, { userId }],
+				// $and: { userId }
+			}
+		});
+		if (tagInstance) {
+			const result = await tagInstance.update({ ...req.body.tagInstance });
+			//tagInstance.tagId = 2;
+			//const saveRes = await tagInstance.save();
+			res.json({ tagInstance });
+		} else {
+			const err = new Error();
+			err.title = 'TagInstance Not Found';
+			err.status = 404;
+			next(err);
+		}
+	}));
+
+//DELETE /businesses/reviews/tags/:id - deletes a given tag instance for specified business
+//**Functioning 4.22.20 */
+router.delete('/reviews/tags',//do we need tagInstance id; will front-end have this info???:id',
+	//requireAuth
+	asyncHandler(async (req, res) => {
+		//assumes userId, businessId and reviewId passed in request
+		const { userId, businessId, reviewId } = req.body;
+		console.log('body: ', req.body);
+		console.log('userId: ', userId);
+		console.log('bizId: ', businessId);
+		console.log('revId: ', reviewId);
+
+		const tagInstance = await TagInstance.findOne({
+			where: {
+				reviewId,
+				businessId,
+				userId
+				//$and: [{ businessId }, { userId }],
+				// $and: { userId }
+			}
+		});
+		console.log('tagInstance: ', tagInstance)
+		if (tagInstance) {
+			await tagInstance.destroy();
+			res.json({ deleted: true });
+		} else {
+			const err = new Error();
+			err.title = 'TagInstance Not Found';
+			err.status = 404;
+			next(err);
+		}
+	}));
+
 
 module.exports = router;
