@@ -239,4 +239,21 @@ router.get(
 	})
 );
 
+//POST /businesses/:biz_id/reviews/:id/tags
+//create new tag and attach to specified review
+router.post('/businesses/:biz_id/reviews/:id/tags',
+    //requireAuth
+    asyncHandler(async (req, res) => {
+        //get review
+        //add tag
+        const tagInstance = await TagInstance.create({
+            businessId: biz_id,
+            reviewId: id,
+            userId: req.body.userId,
+            tagId: req.body.tagId//assumes tag already exists
+        });
+        res.json({ tagInstance });
+    })
+)
+
 module.exports = router;
