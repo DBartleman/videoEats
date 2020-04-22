@@ -33,7 +33,7 @@ signUpForm.addEventListener('submit', async (e) => {
 		const { token, user: { id } } = await res.json();
 		// store the tokens into the local storage
 		localStorage.setItem('VIDEO_EATS_ACCESS_TOKEN', token);
-		localStorage.setItem('VIDEO_EATS,CURRENT_USER_ID', id);
+		localStorage.setItem('VIDEO_EATS_CURRENT_USER_ID', id);
 		// redirect back to home if sign up is succcessful
 		window.location.href = '/';
 	} catch (err) {
