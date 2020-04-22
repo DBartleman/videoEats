@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// const businessRating = formData.get('businessRating');
 
 		// storing all the values that are required into the body variable to be parsed into JSON during the POST response
+		// TODO: add logic fo typeId to determine if the review type is 1-video, 2-text, 3-mixed
 		const body = {
 			review: {
 				businessId: id,

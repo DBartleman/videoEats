@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// destructure to get the reviews array of objects
 		const { reviews } = await res.json();
 
+		// Finds the average of the ratings
+		// const businessRatingAverage = reviews.forEach()
+		const stars = document.querySelectorAll('.star');
+
 		// render the reviews in cards
 		const reviewSection = document.querySelector('.review-section');
 
