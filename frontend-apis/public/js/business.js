@@ -62,9 +62,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 		reviewSection.innerHTML = reviewCardsHTML.join('');
 
 		// Individual ratings from reviews
-		reviews.forEach((review, index) => {
-			const stars = document.querySelectorAll('.star');
-			const rating = document.querySelector('.stars').getAttribute('data-rating');
+		const reviewCard = document.querySelectorAll('.card');
+		reviewCard.forEach((review) => {
+			const stars = review.querySelectorAll('.star');
+			const rating = review.querySelector('.stars').getAttribute('data-rating');
 			stars.forEach((star, index) => {
 				if (rating > index) {
 					star.classList.add('rated');
