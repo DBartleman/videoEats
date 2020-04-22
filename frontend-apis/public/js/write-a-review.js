@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
 	const reviewForm = document.querySelector('.create-review');
+	let stars = document.querySelectorAll('.star');
 	// Not using the business Search at this time **4/22/2020**
 	// const businessSearch = document.getElementById('businessName');
 
@@ -8,12 +9,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const urlSplit = url.split('/');
 	const id = urlSplit[4];
 
-	// Handling the click event for cancel
-	const cancelReview = document.getElementById('reivew-cancel-button');
-	cancelReview.addEventListener('click', () => {
-		location.href = `/businesses/${id}`;
+	// JavaScript to handle the stars
+	// Add the event listening click with the callback function to set the rating for each star
+	stars.forEach((star) => {
+		star.addEventListener('click', setRating);
 	});
 
+	// getting the value from 'data-rating' and parsing it into a number
+	let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+	// create the target variable and set that to the value within the array
+	let target = stars[rating - 1];
+	// creating a custom event for the target variable. dispatchEvent will cause the eventlistener to go through in sequential order
+	target.dispatchEvent(new MouseEvent('click'));
+
+	function setRating(ev) {
+		let span = ev.currentTarget;
+		let stars = document.querySelectorAll('.star');
+		let match = false;
+		let num = 0;
+		stars.forEach((star, index) => {
+			if (match) {
+				star.classList.remove('rated');
+			} else {
+				star.classList.add('rated');
+			}
+			// are we currently looking at the span that was clicked?
+			if (star === span) {
+				match = true;
+				num = index + 1;
+			}
+		});
+		document.querySelector('.stars').setAttribute('data-rating', num);
+		rating = num;
+	}
+
+	// Event listener to handle the submission of the review form
 	reviewForm.addEventListener('submit', async (e) => {
 		// prevents the default of the submit button
 		e.preventDefault();
@@ -21,7 +51,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// Declare varibles to store and be parsed as a post method for the buisness
 		const formData = new FormData(reviewForm);
 		const reviewText = formData.get('reviewText');
-		// const bizRatings = formData.get('bizRatings');
+		// const businessRating = formData.get('businessRating');
+
+		// storing all the values that are required into the body variable to be parsed into JSON during the POST response
 		const body = {
 			review: {
 				businessId: id,
@@ -30,13 +62,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 				typeId: 2,
 				upVoteCount: 0,
 				downVoteCount: 0,
-				businessRating: 4.5
+				businessRating: rating
 			}
 		};
 
 		// TODO: Create the event listener keyup for the business name search. this is a stretch goal.
-
-		// Need to somehow get the id
 		try {
 			const res = await fetch(`http://localhost:8080/businesses/${id}/reviews`, {
 				method: 'POST',
@@ -80,5 +110,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 				alert('Something went wrong. Please check your internet connection and try again!');
 			}
 		}
+	});
+
+	// Handling the click event for cancel
+	const cancelReview = document.getElementById('reivew-cancel-button');
+	cancelReview.addEventListener('click', () => {
+		location.href = `/businesses/${id}`;
 	});
 });
