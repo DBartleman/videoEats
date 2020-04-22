@@ -52,3 +52,12 @@
 	padding: 10px;
 	grid-column: 1 / span 1;
 }
+
+/* Write a review styles */
+.form-container {
+	margin: 0 auto;
+	width: 800px;
+	text-align: center;
+}
+.create-review {
+}
