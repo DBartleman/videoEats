@@ -142,7 +142,7 @@ router.get('/:id(\\d+)/reviews',
             //include: []
             include: [{
                 model: User,
-                attributes: ['id']
+                attributes: ['userName', 'firstName']
             }]
         });
         res.json({ reviews });
@@ -154,7 +154,7 @@ router.get('/:biz_id(\\d+)/reviews/:id(\\d+)', asyncHandler(async (req, res) => 
     const review = await Review.findByPk(req.params.id, {
         include: [{//do we need to include any specific attributes? Include may be unnecessary.
             model: User,
-            attributes: ['id']
+            attributes: ['userName', 'firstName']
         }]
     })
     res.json({ review });
@@ -217,5 +217,22 @@ router.get('/:id(\\d+)/tags', asyncHandler(async (req, res) => {
     });
     res.json({ tags });
 }))
+
+//POST /businesses/:biz_id/reviews/:id/tags
+//create new tag and attach to specified review
+router.post('/businesses/:biz_id/reviews/:id/tags',
+    //requireAuth
+    asyncHandler(async (req, res) => {
+        //get review
+        //add tag
+        const tagInstance = await TagInstance.create({
+            businessId: biz_id,
+            reviewId: id,
+            userId: req.body.userId,
+            tagId: req.body.tagId//assumes tag already exists
+        });
+        res.json({ tagInstance });
+    })
+)
 
 module.exports = router;

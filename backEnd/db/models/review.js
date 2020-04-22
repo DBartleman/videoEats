@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     upVoteCount: { type: DataTypes.INTEGER, allowNull: false },
     downVoteCount: { type: DataTypes.INTEGER, allowNull: false },
     videoLink: DataTypes.STRING,
-    reviewText: DataTypes.TEXT
+    reviewText: DataTypes.TEXT,
+    businessRating: DataTypes.STRING
   }, {});
   Review.associate = function (models) {
     Review.belongsTo(models.Business, { foreignKey: 'businessId' });
