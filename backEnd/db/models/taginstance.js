@@ -7,10 +7,11 @@ module.exports = (sequelize, DataTypes) => {
     userId: { type: DataTypes.INTEGER, allowNull: false }
   }, {});
   TagInstance.associate = function (models) {
-    // TagInstance.belongsToMany(models.Tag, {
-    //    foreignKey: 'tagId' });
-    // TagInstance.belongsToMany(models.Review, { foreignKey: 'reviewId' });
-    // TagInstance.belongsToMany(models.User, { foreignKey: 'userId' });
+    // TagInstance.belongsTo(models.Tag, {
+    //   foreignKey: 'tagId'
+    // });
+    // TagInstance.belongsTo(models.Review, { foreignKey: 'reviewId' });
+    // TagInstance.belongsTo(models.User, { foreignKey: 'userId' });
   };
   return TagInstance;
 };
