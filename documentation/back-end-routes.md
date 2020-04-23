@@ -10,11 +10,11 @@
  
 ## **Reviews**
  
-* POST /businesses/:biz_id/reviews/ - creates a new review ***-- functioning 4.20.20***
+* POST /businesses/:id/reviews/ - creates a new review ***-- functioning 4.20.20***
 * GET /businesses/:id/reviews - returns all reviews for a given business ***-- functioning 4.20.20***
-* GET /businesses/:biz_id/reviews/:id - returns a given review ***-- functioning 4.21.20***
-* PUT /businesses/:biz_id/reviews/:id - updates a given review ***-- functioning 4.21.20***
-* DELETE /businesses/:biz_id/reviews/:id - deletes a given review ***-- functioning 4.21.20***
+* GET /businesses/reviews/:id - returns a given review ***-- functioning 4.21.20***
+* PUT /businesses/reviews/:id - updates a given review ***-- functioning 4.21.20***
+* DELETE /businesses/reviews/:id - deletes a given review ***-- functioning 4.21.20***
  
 ## **Tags**
  
@@ -22,7 +22,9 @@
 * GET /businesses/tags - returns all existing tag options ***-- functioning 4.21.20***
 * GET /businesses/:biz_id/tags/ - returns all tags for specified business ***-- functioning 4.21.20*** (change to top 'x' tags?)
 * PUT /businesses/:biz_id/tags/:id - updates a given tag instance ***-- functioning 4.22.20***
-* DELETE /businesses/reviews/tags/:id - deletes a given tag instance for specified business ***-- functioning 4.22.20***
+* DELETE /businesses/reviews/tags/ - deletes a given tag instance for specified business (tag value specified in req.body) ***-- functioning 4.22.20***
+
+* DELETE /businesses/tags/ - deletes a given tag type for all businesses (no longer searchable) ***-- functioning 4.22.20***
  
 ## **Users**
  
@@ -32,3 +34,10 @@
 * DELETE /users/:id - deletes a given user ***-- functioning 4.18.20***
 * POST /users/token - gets JWT auth token for user ***-- functioning 4.20.20***
 * GET /users/:id/reviews - returns all reviews for a given user ***-- functioning 4.21.20***
+
+## **Votes**
+
+* POST /businesses/reviews/:id/votes - creates a new vote instance
+* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?)
+* PUT /businesses/reviews/votes/:id - updates a specific vote instance for related review
+* DELETE /businesses/reviews/votes/:id - deletes specific vote instance 
