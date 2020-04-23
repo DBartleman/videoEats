@@ -34,3 +34,10 @@
 * DELETE /users/:id - deletes a given user ***-- functioning 4.18.20***
 * POST /users/token - gets JWT auth token for user ***-- functioning 4.20.20***
 * GET /users/:id/reviews - returns all reviews for a given user ***-- functioning 4.21.20***
+
+## **Votes**
+
+* POST /businesses/reviews/:id/votes - creates a new vote instance
+* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?)
+* PUT /businesses/reviews/votes/:id - updates a specific vote instance for related review
+* DELETE /businesses/reviews/votes/:id - deletes specific vote instance 
