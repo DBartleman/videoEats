@@ -1,6 +1,6 @@
 const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
-const { Business, Review, Tag, TagInstance, User } = require('../db/models');
+const { Business, Review, Tag, TagInstance, User, VoteInstance } = require('../db/models');
 const { requireAuth } = require('../utils/auth.js');
 
 const router = express.Router();
@@ -24,14 +24,6 @@ router.post(
 				name: business.name
 			}
 		});
-
-		//remove token creation???
-		// const token = getUserToken(user);
-		// res.status(201).json({
-		//     user: { id: user.id },
-		//     business: { id: business.id },
-		//     token,
-		// });
 	})
 );
 
@@ -68,7 +60,7 @@ router.get(
 router.put(
 	'/:id(\\d+)',
 	//requireAuth, removed for postman testing
-	asyncHandler(async (req, res) => {
+	asyncHandler(async (req, res, next) => {
 		const business = await Business.findByPk(req.params.id);
 		if (business) {
 			await business.update({ ...req.body });
@@ -177,7 +169,7 @@ router.get(
 router.put(
 	'/reviews/:id(\\d+)',
 	//requireAuth, removed for postman testing
-	asyncHandler(async (req, res) => {
+	asyncHandler(async (req, res, next) => {
 		const review = await Review.findByPk(req.params.id);
 		if (review) {
 			await review.update({ ...req.body.review }); //assumes req body has nested review object
@@ -302,7 +294,7 @@ router.put(
 router.delete(
 	'/reviews/tags', //do we need tagInstance id; will front-end have this info???:id',
 	//requireAuth
-	asyncHandler(async (req, res) => {
+	asyncHandler(async (req, res, next) => {
 		//assumes userId, businessId and reviewId passed in request
 		const { userId, businessId, reviewId, tag } = req.body;
 		const tagType = await Tag.findOne({ where: { type: tag } });
@@ -342,7 +334,7 @@ router.delete(
 //functioning 4.22.20
 router.delete(
 	'/tags/:id(\\d+)',
-	asyncHandler(async (req, res) => {
+	asyncHandler(async (req, res, next) => {
 		const tag = await Tag.findByPk(req.params.id);
 		if (tag) {
 			await tag.destroy();
@@ -357,4 +349,107 @@ router.delete(
 	})
 );
 
+//************************************************ Vote-Based Routes ******************/
+
+//* POST /businesses/reviews/:id/votes - creates a new vote instance
+//**Functioning 4.23.20 ......TO-DO: add unique indexes to join tables */
+router.post(
+	'/reviews/:id(\\d+)/votes',
+	//requireAuth - removed for testing with postman
+	asyncHandler(async (req, res) => {
+		const { user, vote } = req.body;
+		const newVote = await VoteInstance.create({
+			typeId: vote.typeId,
+			userId: user.id,
+			reviewId: req.params.id
+		});
+		res.json({ newVote });
+	})
+);
+
+//* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?)
+//**Functioning 4.23.20 */
+router.get(
+	'/reviews/:id(\\d+)/votes',
+	asyncHandler(async (req, res) => {
+		const upCount = await VoteInstance.findAndCountAll({
+			where: {
+				reviewId: req.params.id,
+				typeId: 1
+			},
+			attributes: []
+		});
+		const downCount = await VoteInstance.findAndCountAll({
+			where: {
+				reviewId: req.params.id,
+				typeId: 2
+			},
+			attributes: []
+		});
+		res.json({
+			upCount: upCount.count,
+			downCount: downCount.count
+		});
+	})
+);
+
+//* PUT /businesses/reviews/votes/:id - updates a specific vote instance for related review
+//**Functioning 4.23.20 */
+router.put(
+	'/reviews/:id(\\d+)/votes/',
+	//requireAuth
+	asyncHandler(async (req, res, next) => {
+		const { user: { id }, vote: { typeId } } = req.body;
+		const voteInstance = await VoteInstance.findOne({
+			where: {
+				reviewId: req.params.id,
+				userId: id
+				//$and: [{ businessId }, { userId }],
+				// $and: { userId }
+			}
+		});
+		if (voteInstance) {
+			const result = await voteInstance.update({ typeId });
+			//voteInstance.voteId = 2;
+			//const saveRes = await voteInstance.save();
+			res.json({
+				update: true,
+				newType: result.typeId
+			});
+		} else {
+			const err = new Error();
+			err.title = 'VoteInstance Not Found';
+			err.status = 404;
+			next(err);
+		}
+	})
+);
+
+//delete voteInstance for specified review and passed-in user
+//**Functioning 4.23.20 */
+router.delete(
+	'/reviews/:id(\\d+)/votes',
+	//requireAuthh)
+	asyncHandler(async (req, res, next) => {
+		const { user: { id } } = req.body;
+		const voteInstance = await VoteInstance.findOne({
+			where: {
+				userId: id,
+				reviewId: req.params.id
+			}
+		});
+		if (voteInstance) {
+			console.log('voteInst', voteInstance);
+			await voteInstance.destroy();
+			//voteInstance.voteId = 2;
+			//const saveRes = await voteInstance.save();
+			res.json({ deleted: true });
+		} else {
+			const err = new Error();
+			err.title = 'Vote Instance Not Found';
+			err.status = 404;
+			next(err);
+		}
+	})
+);
 module.exports = router;
