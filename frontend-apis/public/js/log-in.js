@@ -1,4 +1,4 @@
-if (localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN') !== null) {
+if (localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN')) {
 	alert('You are already logged in!');
 	window.history.back();
 }
