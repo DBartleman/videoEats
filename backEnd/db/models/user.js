@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     User.belongsTo(models.StatusType, { foreignKey: 'statusTypeId' });
     User.hasMany(models.Business, { foreignKey: 'ownerId' });
     User.hasMany(models.Review, { foreignKey: 'userId' });
-    User.belongsToMany(models.VoteType, {
-      through: models.VoteInstance,
-      foreignKey: 'userId',
-      otherKey: 'typeId'
-    });
+    // User.belongsToMany(models.VoteType, {
+    //   through: models.VoteInstance,
+    //   foreignKey: 'userId',
+    //   otherKey: 'typeId'
+    // });
     // User.belongsToMany(models.Tag, {
     //   through: models.TagInstance,
     //   foreignKey: 'userId',
