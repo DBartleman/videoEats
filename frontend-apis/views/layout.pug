@@ -13,8 +13,7 @@ html
       #navbarSupportedContent.collapse.navbar-collapse 
         ul.navbar-nav.mr-auto
           span(class='navbar-text px-4 navLoggedIn_Welcome hidden') 
-          form(class='form-inline pr-4' action='/user/logout' method='post')
-          button(id = 'logout_btn' class='btn btn-sm btn-warning navLoggedIn_Logout hidden' type='submit') Logout
+          
           li.nav-item
             a.nav-link(class='navLoggedOut' href='/log-in') Log in
           li.nav-item
@@ -29,6 +28,8 @@ html
               //-.dropdown-divider
           //-li.nav-item
             a.nav-link.disabled(href='#') Disabled
+          form(class='form-inline pr-4' action='/user/logout' method='post')
+          button(id = 'logout_btn' class='btn btn-sm btn-warning navLoggedIn_Logout hidden' type='submit') Logout
         form.form-inline.navbar-search.my-2.my-lg-0
           input.form-control.mr-sm-2(type='search' placeholder='Search by restaurant, food, location...' aria-label='Search')
           button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
