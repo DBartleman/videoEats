@@ -40,33 +40,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// render the reviews in cards
 		const reviewSection = document.querySelector('.review-section');
 
-		// const reviewCardsHTML = reviews.map(
-		// 	(review) => `
-		// 		<div class="card mt-2" id="review-${review.id}">
-		// 			<div class="card-body">
-		// 				<div class="stars" data-rating="${review.businessRating}">
-		// 					<span class="star"></span>
-		// 					<span class="star"></span>
-		// 					<span class="star"></span>
-		// 					<span class="star"></span>
-		// 					<span class="star"></span>
-		// 				</div>
-		// 				<p class="card-text">${review.reviewText}</p>
-		// 				<p class="card-text">${review.User.userName}</p>
-		// 				<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
-		// 			</div>
-		// 		</div>
-		// 		`
-		// );
-		// reviewSection.innerHTML = reviewCardsHTML.join('');
-
-		let reviewCardsHTML;
-		reviews.forEach((review) => {
-			console.log(review.id, review.typeId);
+		const reviewCardsHTML = reviews.map((review) => {
 			if (review.typeId === 1) {
-				console.log("i'm inside of type 1", review.typeId);
-				reviewCardsHTML = reviews.map(
-					(review) => `
+				return `
 				<div class="card mt-2" id="review-${review.id}">
 					<div class="card-body">
 						<div class="stars" data-rating="${review.businessRating}">
@@ -76,20 +52,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 							<span class="star"></span>
 							<span class="star"></span>
 						</div>
-						<div>
+						<div class="video-review">
 							<iframe width="560" height="315" src=${review.videoLink}></iframe>
 						</div>
 						<p class="card-text">${review.User.userName}</p>
 						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 					</div>
 				</div>
-				`
-				);
-			} else if (review.typeId === 2 && review.videoLink === '') {
-				console.log("i'm inside of type 2", review.typeId);
-				console.log(
-					(reviewCardsHTML = reviews.map(
-						(review) => `
+				`;
+			} else if (review.typeId === 2) {
+				return `
 				<div class="card mt-2" id="review-${review.id}">
 					<div class="card-body">
 						<div class="stars" data-rating="${review.businessRating}">
@@ -99,18 +71,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 							<span class="star"></span>
 							<span class="star"></span>
 						</div>
-						<p class="card-text">${review.reviewText}</p>
+						<p class="card-text review-text">${review.reviewText}</p>
 						<p class="card-text">${review.User.userName}</p>
 						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 					</div>
-				</div>
-				`
-					))
-				);
+				</div>`;
 			} else {
-				console.log("i'm inside of type 3", review.typeId);
-				reviewCardsHTML = reviews.map(
-					(review) => `
+				return `
 				<div class="card mt-2" id="review-${review.id}">
 					<div class="card-body">
 						<div class="stars" data-rating="${review.businessRating}">
@@ -120,16 +87,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 							<span class="star"></span>
 							<span class="star"></span>
 						</div>
-						<p class="card-text">${review.reviewText}</p>
-						<div>
+						<p class="card-text review-text">${review.reviewText}</p>
+						<div class="video-review">
 							<iframe width="560" height="315" src=${review.videoLink}></iframe>
 						</div>
 						<p class="card-text">${review.User.userName}</p>
 						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 					</div>
-				</div>
-				`
-				);
+				</div>`;
 			}
 		});
 		reviewSection.innerHTML = reviewCardsHTML.join('');
