@@ -16,8 +16,9 @@ block content
                     span.star
                     span.star
             .form-group
-                textarea(name="reviewText" rows="10" placeholder="Write your review here!" class="form-control" required)
-            //- TODO: create a field to add the embeded link to review
+                textarea(name="reviewText" rows="10" placeholder="Write your review here!" class="form-control")
+            .form-group
+                textarea(name="videoLink" class="form-control" placeholder="Embed a youtube source share URL: https://www.youtube.com/embed/ixgIQqr5008")
             //- TODO: add tag field
             div
                 button(type="submit" class="btn btn-primary") Post Review

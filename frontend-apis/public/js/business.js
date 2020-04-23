@@ -16,18 +16,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		// destructure to get the reviews array of objects
 		const { reviews } = await res.json();
+		console.log(reviews);
 
 		// Finds the average of the ratings
 		let ratingsArray = [];
 		reviews.forEach((review) => {
 			ratingsArray.push(parseInt(review.businessRating));
 		});
-		console.log(ratingsArray);
 		const sumRating = ratingsArray.reduce((a, b) => {
 			return a + b;
 		}, 0);
 		const averageRating = sumRating / ratingsArray.length;
-		console.log(averageRating);
 		const businessStars = document.querySelectorAll('.business-star');
 		businessStars.forEach((star, index) => {
 			if (averageRating > index) {
@@ -41,24 +40,63 @@ document.addEventListener('DOMContentLoaded', async () => {
 		// render the reviews in cards
 		const reviewSection = document.querySelector('.review-section');
 
-		const reviewCardsHTML = reviews.map(
-			(review) => `
-			<div class="card mt-2" id="review-${review.id}">
-				<div class="card-body">
-					<div class="stars" data-rating="${review.businessRating}">
-						<span class="star"></span>
-						<span class="star"></span>
-						<span class="star"></span>
-						<span class="star"></span>
-						<span class="star"></span>
+		const reviewCardsHTML = reviews.map((review) => {
+			if (review.typeId === 1) {
+				return `
+				<div class="card mt-2" id="review-${review.id}">
+					<div class="card-body">
+						<div class="stars" data-rating="${review.businessRating}">
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+						</div>
+						<div class="video-review">
+							<iframe width="560" height="315" src=${review.videoLink}></iframe>
+						</div>
+						<p class="card-text">${review.User.userName}</p>
+						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 					</div>
-					<p class="card-text">${review.reviewText}</p>
-					<p class="card-text">${review.User.userName}</p>
-					<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
 				</div>
-			</div>
-			`
-		);
+				`;
+			} else if (review.typeId === 2) {
+				return `
+				<div class="card mt-2" id="review-${review.id}">
+					<div class="card-body">
+						<div class="stars" data-rating="${review.businessRating}">
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+						</div>
+						<p class="card-text review-text">${review.reviewText}</p>
+						<p class="card-text">${review.User.userName}</p>
+						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
+					</div>
+				</div>`;
+			} else {
+				return `
+				<div class="card mt-2" id="review-${review.id}">
+					<div class="card-body">
+						<div class="stars" data-rating="${review.businessRating}">
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+							<span class="star"></span>
+						</div>
+						<p class="card-text review-text">${review.reviewText}</p>
+						<div class="video-review">
+							<iframe width="560" height="315" src=${review.videoLink}></iframe>
+						</div>
+						<p class="card-text">${review.User.userName}</p>
+						<p class="card-text">${review.createdAt.slice(5, 10) + '-' + review.createdAt.slice(0, 4)}</p>
+					</div>
+				</div>`;
+			}
+		});
 		reviewSection.innerHTML = reviewCardsHTML.join('');
 
 		// Individual ratings from reviews

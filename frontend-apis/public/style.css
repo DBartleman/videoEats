@@ -1,3 +1,9 @@
+.hidden {
+	display: none;
+}
+h1{
+	color: purple;
+}
 .body-content {
 	padding: 40px;
 }
