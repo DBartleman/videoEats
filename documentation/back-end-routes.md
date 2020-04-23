@@ -37,7 +37,7 @@
 
 ## **Votes**
 
-* POST /businesses/reviews/:id/votes - creates a new vote instance
-* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?)
+* POST /businesses/reviews/:id/votes - creates a new vote instance ***-- functioning 4.23.20***
+* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?) ***-- functioning 4.23.20***
 * PUT /businesses/reviews/votes/:id - updates a specific vote instance for related review
 * DELETE /businesses/reviews/votes/:id - deletes specific vote instance 
