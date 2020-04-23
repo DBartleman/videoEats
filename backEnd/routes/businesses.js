@@ -24,14 +24,6 @@ router.post(
 				name: business.name
 			}
 		});
-
-		//remove token creation???
-		// const token = getUserToken(user);
-		// res.status(201).json({
-		//     user: { id: user.id },
-		//     business: { id: business.id },
-		//     token,
-		// });
 	})
 );
 
