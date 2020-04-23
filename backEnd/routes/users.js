@@ -43,7 +43,7 @@ router.post('/', validateUsername, validateEmailAndPassword, handleValidationErr
 );
 
 //get specific user
-router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
+router.get('/:id(\\d+)', requireAuth, asyncHandler(async (req, res) => {
     const user = await User.findByPk(req.params.id, {
         include: [{ model: StatusType, attributes: ['type'] }],
         attributes: ['userName', 'firstName', 'revScore']
