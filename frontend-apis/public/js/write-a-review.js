@@ -50,20 +50,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 		// Declare varibles to store and be parsed as a post method for the buisness
 		const formData = new FormData(reviewForm);
-		const reviewText = formData.get('reviewText');
-		// const businessRating = formData.get('businessRating');
+		let reviewText = formData.get('reviewText');
+		let videoLink = formData.get('videoLink');
+
+		// Logic to set the typeId
+		let typeId;
+		if (reviewText !== '' && videoLink === '') {
+			// Text only
+			typeId = 2;
+		} else if (reviewText === '' && videoLink !== '') {
+			// Video only
+			typeId = 1;
+		} else {
+			// mixed
+			typeId = 3;
+		}
 
 		// storing all the values that are required into the body variable to be parsed into JSON during the POST response
-		// TODO: add logic fo typeId to determine if the review type is 1-video, 2-text, 3-mixed
 		const body = {
 			review: {
 				businessId: id,
 				reviewText,
 				userId: localStorage.getItem('VIDEO_EATS_CURRENT_USER_ID'),
-				typeId: 2,
+				typeId: typeId,
 				upVoteCount: 0,
 				downVoteCount: 0,
-				businessRating: rating
+				businessRating: rating,
+				videoLink: videoLink
 			}
 		};
 
