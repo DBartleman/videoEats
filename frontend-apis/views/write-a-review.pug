@@ -20,7 +20,9 @@ block content
             .form-group
                 textarea(name="videoLink" class="form-control" placeholder="Embed a youtube source share URL: https://www.youtube.com/embed/ixgIQqr5008")
             .form-group
-                input(type="search" class="form-control autocomplete" id="reviewTags" name="reviewTags" placeholder="Search for related tags")
+                input(type="text" class="form-control autocomplete" id="reviewTags" name="reviewTags" placeholder="Search for related tags")
+                ul.tags-results
+                .selected-tags
             div
                 button(type="submit" class="btn btn-primary") Post Review
                 button(type="button" class="ml-2 btn" id="reivew-cancel-button") Cancel
