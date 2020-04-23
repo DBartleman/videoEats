@@ -4,8 +4,35 @@ html
     title VideoEats - #{title}
     link(rel="stylesheet" type="text/css" href="/style.css")
     link(href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh", crossorigin="anonymous")
+    
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      a.navbar-brand(href='#') Navbar
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarNavDropdown.collapse.navbar-collapse
+        ul.navbar-nav
+          li.nav-item.active
+            a.nav-link(href='#')
+              | Home 
+              span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='#') Features
+          li.nav-item
+            a.nav-link(href='#') Pricing
+          li.nav-item.dropdown
+            a#navbarDropdownMenuLink.nav-link.dropdown-toggle(href='#' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+              | Dropdown link
+            .dropdown-menu(aria-labelledby='navbarDropdownMenuLink')
+              a.dropdown-item(href='#') Action
+              a.dropdown-item(href='#') Another action
+              a.dropdown-item(href='#') Something else here
+      block content
+      script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js", integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6", crossorigin="anonymous")
+      script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js", integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm", crossorigin="anonymous")
+
+    
+    //-nav.navbar.navbar-expand-lg.navbar-light.bg-light.d-flex.flex-row
       a.navbar-brand(href='/') Video Eats
       button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
         span.navbar-toggler-icon
@@ -20,17 +47,17 @@ html
             a.nav-link(href='log-in') Log in
           li.nav-item
             a.nav-link(href='sign-up') Sign up
-          //-li.nav-item.dropdown
+          li.nav-item.dropdown.justify-content-end
             a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
-              | Dropdown
+              | Search for:
             .dropdown-menu(aria-labelledby='navbarDropdown')
-              a.dropdown-item(href='#') Action
-              a.dropdown-item(href='#') Another action
-              .dropdown-divider
-              a.dropdown-item(href='#') Something else here
+              a.dropdown-item(href='#') Restaurant name
+              a.dropdown-item(href='#') Location
+              a.dropdown-item(href='#') Tag
+              //-.dropdown-divider
           //-li.nav-item
             a.nav-link.disabled(href='#') Disabled
-        form.form-inline.my-2.my-lg-0.navbar-search
+        form.form-inline.navbar-search.my-2.my-lg-0
           input.form-control.mr-sm-2(type='search' placeholder='Search by restaurant, food, location...' aria-label='Search')
           button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
           //- TODO: alter search route to be something like /search/?= once we implement /search
