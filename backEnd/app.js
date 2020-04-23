@@ -15,6 +15,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:4000' }));//change path to host-address when acquired
 
+
 //mount routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

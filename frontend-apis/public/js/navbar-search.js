@@ -5,8 +5,11 @@ const dropDownMenu = document.querySelector('.dropdown-menu');
 const dropDownName = document.getElementById('item-name');
 const dropDownLocation = document.getElementById('item-location');
 const dropDownTag = document.getElementById('item-tag');
-
+const searchField = document.querySelector('.searchField');
+const searchButton = document.getElementById('search-btn');
 const collapseButton = document.querySelector('.navbar-collapse');
+let searchingFor = 1;
+
 console.log(navbarSearch);
 // set up the event listener for the submit button
 navbarSearch.addEventListener('submit', async (e) => {
@@ -24,16 +27,22 @@ collapseButton.addEventListener('click', () => {
 	collapseButton.classList.toggle('show');
 });
 dropDownMenu.addEventListener('click', (event) => {
-	//console.log(dropDownItem.innerHTML);
 	// help me dry up this code please
 	console.log(event.target);
 	if (event.target === dropDownName) {
 		dropDownToggle.innerHTML = "Search for: " + dropDownName.innerHTML;
+		searchField.placeholder = "< " + dropDownName.innerHTML + " >";
 	}
 	else if (event.target === dropDownLocation) {
 		dropDownToggle.innerHTML = "Search for: " + dropDownLocation.innerHTML;
+		searchField.placeholder = dropDownLocation.innerHTML;
+		
 	}
 	else if (event.target === dropDownTag) {
 		dropDownToggle.innerHTML = "Search for: " + dropDownTag.innerHTML;
+		searchField.placeholder = dropDownTag.innerHTML;
 	}
+});
+searchButton.addEventListener('click', () => {
+	//codeAddress(searchField.value);
 });
