@@ -1,3 +1,7 @@
+if (localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN') !== null) {
+	alert('You are already logged in!');
+	window.history.back();
+}
 const logInForm = document.querySelector('.log-in-form');
 
 // set up the event listener for the submit button
@@ -10,11 +14,6 @@ logInForm.addEventListener('submit', async (e) => {
 	const email = formData.get('email');
 	const password = formData.get('password');
 	const body = { email, password };
-
-	if (localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN') !== null) {
-		alert('You are already loggined in!');
-		window.location.href = '/';
-	}
 
 	try {
 		const res = await fetch('http://localhost:8080/users/token', {
