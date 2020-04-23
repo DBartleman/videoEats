@@ -157,7 +157,7 @@ router.get(
 //* GET /businesses/:biz_id/reviews/:id - returns a given review
 //**functioning 4.21.20**
 router.get(
-	'/:biz_id(\\d+)/reviews/:id(\\d+)',
+	'/reviews/:id(\\d+)',
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
 			include: [
@@ -175,7 +175,7 @@ router.get(
 //* PUT /businesses/:biz_id/reviews/:id - updates a given review
 //**functioning 4.21.20**
 router.put(
-	'/:biz_id(\\d+)/reviews/:id(\\d+)',
+	'/reviews/:id(\\d+)',
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id);
@@ -201,7 +201,7 @@ router.put(
 
 //deletes a specified review **Functioning 4.21.20**
 router.delete(
-	'/:biz_id(\\d+)/reviews/:id(\\d+)',
+	'/reviews/:id(\\d+)',
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
@@ -300,32 +300,53 @@ router.delete('/reviews/tags',//do we need tagInstance id; will front-end have t
 	//requireAuth
 	asyncHandler(async (req, res) => {
 		//assumes userId, businessId and reviewId passed in request
-		const { userId, businessId, reviewId } = req.body;
-		console.log('body: ', req.body);
-		console.log('userId: ', userId);
-		console.log('bizId: ', businessId);
-		console.log('revId: ', reviewId);
-
-		const tagInstance = await TagInstance.findOne({
-			where: {
-				reviewId,
-				businessId,
-				userId
-				//$and: [{ businessId }, { userId }],
-				// $and: { userId }
+		const { userId, businessId, reviewId, tag } = req.body;
+		const tagType = await Tag.findOne({ where: { type: tag } });
+		console.log('tagType: ', tagType)
+		if (tagType) {
+			const tagInstance = await TagInstance.findOne({
+				where: {
+					reviewId,
+					businessId,
+					userId,
+					tagId: tagType.id
+					//$and: [{ businessId }, { userId }],
+					// $and: { userId }
+				}
+			});
+			if (tagInstance) {
+				await tagInstance.destroy();
+				res.json({ deleted: true });
+			} else {        //no tag instance to delete
+				const err = new Error();
+				err.title = 'TagInstance Not Found';
+				err.status = 404;
+				next(err);
 			}
-		});
-		console.log('tagInstance: ', tagInstance)
-		if (tagInstance) {
-			await tagInstance.destroy();
-			res.json({ deleted: true });
-		} else {
+		} else {        //no tag type to delete
 			const err = new Error();
-			err.title = 'TagInstance Not Found';
+			err.title = 'Tag type Not Found';
 			err.status = 404;
 			next(err);
 		}
+
+
 	}));
+
+//deletes a tag type from Tag table (no longer searchable)
+//functioning 4.22.20
+router.delete('/tags/:id(\\d+)', asyncHandler(async (req, res) => {
+	const tag = await Tag.findByPk(req.params.id);
+	if (tag) {
+		await tag.destroy();
+		res.json({ deleted: true })
+	} else {         //no tag type to delete
+		const err = new Error();
+		err.title = 'Tag type Not Found';
+		err.status = 404;
+		next(err);
+	}
+}))
 
 
 module.exports = router;

@@ -32,8 +32,14 @@ app.get(`/businesses/:id`, async (req, res) => {
 	}
 });
 
-app.get('/write-a-review', (req, res) => {
-	res.render('write-a-review');
+app.get('/businesses/:id/write-a-review', async (req, res) => {
+	try {
+		const fetchBusiness = await fetch(`http://localhost:8080/businesses/${req.params.id}`);
+		const { business } = await fetchBusiness.json();
+		res.render('write-a-review', { title: 'Write a Review', business });
+	} catch (err) {
+		console.error(err);
+	}
 });
 
 app.get('/businesses/search/?=', (req, res) => {
