@@ -10,7 +10,7 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Defining the routes
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
 	res.render('index', { title: 'Home' });
 });
 

@@ -2,8 +2,8 @@ doctype html
 html
   head
     title VideoEats - #{title}
-    link(rel="stylesheet" type="text/css" href="/style.css")
     link(href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh", crossorigin="anonymous")
+    link(type="text/css" href="/style.css" rel="stylesheet")
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
       a.navbar-brand(href='/') Video Eats
@@ -16,10 +16,22 @@ html
             a.nav-link(href='/')
               | Video Eats
               span.sr-only (current)
+
+
+          span(class='navbar-text px-4 navLoggedIn_Welcome hidden') 
+          form(class='form-inline pr-4' action='/user/logout' method='post')
+          button(id = 'logout_btn' class='btn btn-sm btn-warning navLoggedIn_Logout hidden' type='submit') Logout
           li.nav-item
-            a.nav-link(href='/log-in') Log in
+            a.nav-link(class='navLoggedOut' href='/log-in') Log in
           li.nav-item
-            a.nav-link(href='/sign-up') Sign up
+            a.nav-link(class='navLoggedOut' href='/sign-up') Sign up
+
+          //- functioning code below 4.22.20
+          //- li.nav-item
+          //-   a.nav-link(href='/log-in') Log in
+          //- li.nav-item
+          //-   a.nav-link(href='/sign-up') Sign up
+
           //-li.nav-item.dropdown
             a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
               | Dropdown
@@ -36,4 +48,6 @@ html
           //- TODO: alter search route to be something like /search/?= once we implement /search
     .body-content
       block content
-    script(src="/js/navbar-search.js")
+    script(src="./js/navbar-search.js")
+    script(src="./js/user-auth.js")
+    script(src="./js/log-out.js")
