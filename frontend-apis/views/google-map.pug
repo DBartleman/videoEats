@@ -7,15 +7,25 @@
 
 //- center is currently san fran, can change to a variable later on 
 
-#map
-style.
-#map { height: 100%; }
-script.
-let map;
-function initMap() {
-map = new google.maps.Map(document.getElementById('map'), {
-center: {lat: 37.774, lng: 122.419},
-zoom: 8
-});
-}
-script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_API_KEY}&callback=initMap` async='' defer='')
+doctype html
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    style.
+      #map {
+      height: 100%;
+      }
+      html, body {
+      height: 100%;
+      margin: 15px;
+      padding: 15px;
+      }
+  </head>
+  <body>
+    <div id="map"></div>
+    script(src='/js/initMap.js')
+    script(src=`https://maps.googleapis.com/maps/api/js?key=${mapAPI}&callback=initMap` async='' defer='')
+  </body>
+</html>
