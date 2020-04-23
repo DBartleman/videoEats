@@ -1,7 +1,7 @@
 .hidden {
 	display: none;
 }
-h1{
+h1 {
 	color: purple;
 }
 .body-content {
@@ -111,4 +111,21 @@ h1{
 }
 .business-star.rated {
 	counter-increment: 1; /*Increment the counter by 1*/
+}
+
+/* Tags search input */
+.autocomplete {
+	position: relative;
+	display: inline-block;
+}
+
+.autocomplete-items div {
+	padding: 10px;
+	cursor: pointer;
+	background-color: #fff;
+	border-bottom: 1px solid #d4d4dd;
+}
+
+.autocomplete-items div:hover {
+	background-color: #eee;
 }

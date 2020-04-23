@@ -1,3 +1,4 @@
+// check to see if user is logged in. if they are, alert them then return them back to the previous page.
 if (localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN') !== null) {
 	alert('You are already logged in!');
 	window.history.back();

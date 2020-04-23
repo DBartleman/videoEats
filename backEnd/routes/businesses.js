@@ -40,7 +40,7 @@ router.get(
 	'/',
 	asyncHandler(async (req, res) => {
 		const businesses = await Business.findAll({
-			attributes: ['name', 'address', 'phoneNum', 'hours']
+			attributes: [ 'name', 'address', 'phoneNum', 'hours' ]
 		});
 		res.json({ businesses });
 	})
@@ -97,7 +97,7 @@ router.delete(
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id, {
-			attributes: ['id']
+			attributes: [ 'id' ]
 		});
 		await business.destroy();
 		res.end();
@@ -145,10 +145,10 @@ router.get(
 			include: [
 				{
 					model: User,
-					attributes: ['id', 'userName', 'firstName', 'lastName']
+					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
 				}
 			],
-			order: [['createdAt', 'DESC']]
+			order: [ [ 'createdAt', 'DESC' ] ]
 		});
 		res.json({ reviews });
 	})
@@ -164,7 +164,7 @@ router.get(
 				{
 					//do we need to include any specific attributes? Include may be unnecessary.
 					model: User,
-					attributes: ['id', 'userName', 'firstName', 'lastName']
+					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
 				}
 			]
 		});
@@ -205,7 +205,7 @@ router.delete(
 	//requireAuth, removed for postman testing
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
-			attributes: ['id']
+			attributes: [ 'id' ]
 		});
 		await review.destroy();
 		res.end();
@@ -219,7 +219,7 @@ router.delete(
 router.get(
 	'/tags',
 	asyncHandler(async (req, res) => {
-		const tags = await TagInstance.findAll({ attributes: ['id', 'type'] });
+		const tags = await Tag.findAll({ attributes: [ 'id', 'type' ] });
 		res.json({ tags });
 	})
 );
@@ -239,7 +239,8 @@ router.get(
 //POST /businesses/:biz_id/reviews/:id/tags
 //create new tag and attach to specified review
 //functioning 4.22.20
-router.post('/:biz_id/reviews/:id/tags',
+router.post(
+	'/:biz_id/reviews/:id/tags',
 	//requireAuth
 	asyncHandler(async (req, res) => {
 		//get review
@@ -248,7 +249,7 @@ router.post('/:biz_id/reviews/:id/tags',
 		//assume req.body has "tag" key with text-value of target tag
 		const { tag, userId } = req.body;
 		//check database for tag, make it if it's new
-		const [tagType, _created] = await Tag.findOrCreate({
+		const [ tagType, _created ] = await Tag.findOrCreate({
 			where: { type: tag }
 		});
 
@@ -260,12 +261,13 @@ router.post('/:biz_id/reviews/:id/tags',
 		});
 		res.json({ tagInstance });
 	})
-)
+);
 
 //update a tag instance (not sure we need this endpoint)
 //same as delete (below), except we also pull out tagId from req.body
 //functioning 4.22.20
-router.put('/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
+router.put(
+	'/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
 	//requireAuth
 	asyncHandler(async (req, res, next) => {
 		//assumes userId, businessId and reviewId passed in request
@@ -292,17 +294,19 @@ router.put('/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
 			err.status = 404;
 			next(err);
 		}
-	}));
+	})
+);
 
 //DELETE /businesses/reviews/tags/:id - deletes a given tag instance for specified business
 //**Functioning 4.22.20 */
-router.delete('/reviews/tags',//do we need tagInstance id; will front-end have this info???:id',
+router.delete(
+	'/reviews/tags', //do we need tagInstance id; will front-end have this info???:id',
 	//requireAuth
 	asyncHandler(async (req, res) => {
 		//assumes userId, businessId and reviewId passed in request
 		const { userId, businessId, reviewId, tag } = req.body;
 		const tagType = await Tag.findOne({ where: { type: tag } });
-		console.log('tagType: ', tagType)
+		console.log('tagType: ', tagType);
 		if (tagType) {
 			const tagInstance = await TagInstance.findOne({
 				where: {
@@ -317,36 +321,40 @@ router.delete('/reviews/tags',//do we need tagInstance id; will front-end have t
 			if (tagInstance) {
 				await tagInstance.destroy();
 				res.json({ deleted: true });
-			} else {        //no tag instance to delete
+			} else {
+				//no tag instance to delete
 				const err = new Error();
 				err.title = 'TagInstance Not Found';
 				err.status = 404;
 				next(err);
 			}
-		} else {        //no tag type to delete
+		} else {
+			//no tag type to delete
 			const err = new Error();
 			err.title = 'Tag type Not Found';
 			err.status = 404;
 			next(err);
 		}
-
-
-	}));
+	})
+);
 
 //deletes a tag type from Tag table (no longer searchable)
 //functioning 4.22.20
-router.delete('/tags/:id(\\d+)', asyncHandler(async (req, res) => {
-	const tag = await Tag.findByPk(req.params.id);
-	if (tag) {
-		await tag.destroy();
-		res.json({ deleted: true })
-	} else {         //no tag type to delete
-		const err = new Error();
-		err.title = 'Tag type Not Found';
-		err.status = 404;
-		next(err);
-	}
-}))
-
+router.delete(
+	'/tags/:id(\\d+)',
+	asyncHandler(async (req, res) => {
+		const tag = await Tag.findByPk(req.params.id);
+		if (tag) {
+			await tag.destroy();
+			res.json({ deleted: true });
+		} else {
+			//no tag type to delete
+			const err = new Error();
+			err.title = 'Tag type Not Found';
+			err.status = 404;
+			next(err);
+		}
+	})
+);
 
 module.exports = router;
