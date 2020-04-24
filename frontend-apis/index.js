@@ -12,7 +12,6 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 	res.locals.mapAPI = mapAPI;
-	console.log(mapAPI);
 	next();
 });
 
@@ -49,7 +48,7 @@ app.get('/businesses/:id/write-a-review', async (req, res) => {
 	}
 });
 
-app.get('/businesses/search/?=', (req, res) => {
+app.get('/businesses/search', (req, res) => {
 	res.render('search');
 });
 

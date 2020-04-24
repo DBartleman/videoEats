@@ -113,7 +113,7 @@ h1 {
 	counter-increment: 1; /*Increment the counter by 1*/
 }
 
-/* Tags search input */
+/* Tags search input --- NOT USING AT THE MOMENT
 .autocomplete {
 	position: relative;
 	display: inline-block;
@@ -125,7 +125,6 @@ h1 {
 	border-bottom: none;
 	border-top: none;
 	z-index: 99;
-	/*position the autocomplete items to be the same width as the container:*/
 	top: 100%;
 	left: 0;
 	right: 0;
@@ -171,3 +170,4 @@ h1 {
 	border-radius: .25rem;
 	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+*/
