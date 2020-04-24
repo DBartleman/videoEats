@@ -8,6 +8,18 @@ h1 {
 	padding: 40px;
 }
 
+.business-cards {
+	color: inherit;
+}
+
+.business-cards:hover {
+	text-decoration: none;
+}
+
+.card.stars-business:hover {
+	box-shadow: 10px 5px 10px gray;
+}
+
 /* Sign up form styles */
 .sign-up-container {
 	margin: 0 auto;

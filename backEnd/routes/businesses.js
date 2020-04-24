@@ -183,10 +183,6 @@ router.get(
 				{
 					model: User,
 					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
-				},
-				{
-					model: TagInstance,
-					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			],
 			order: [ [ 'createdAt', 'DESC' ] ]

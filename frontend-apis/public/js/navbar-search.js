@@ -11,6 +11,55 @@ document.addEventListener('DOMContentLoaded', (e) => {
 	const searchField = document.querySelector('.searchField');
 	const collapseButton = document.querySelector('.navbar-collapse');
 
+	const url = window.location.href;
+	console.log(url);
+
+	function generateCards(businesses) {
+		const businessCardsHTML = businesses.map((business) => {
+			return `
+				<a class="business-cards" href="/businesses/${business.id}">
+					<div class="card mt-2 stars-business" id="business-${business.id}">
+						<div class="card-body">
+							<h3 class="card-text">${business.name}</h3>
+							<div class="stars">
+								<span class="business-star star-${business.id}"></span>
+								<span class="business-star star-${business.id}"></span>
+								<span class="business-star star-${business.id}"></span>
+								<span class="business-star star-${business.id}"></span>
+								<span class="business-star star-${business.id}"></span>
+							</div>
+							<div class="card-text">${business.phoneNum}</div>
+							<div class="card-text">${business.address}</div>
+						</div>
+					</div>
+				</a>
+				`;
+		});
+		businessCardContainer.innerHTML = businessCardsHTML.join('');
+	}
+	function findAverageRating(businesses) {
+		businesses.forEach((business) => {
+			let ratingsArray = [];
+			business.Reviews.forEach((rating) => {
+				ratingsArray.push(parseInt(rating.businessRating));
+			});
+			const sumRating = ratingsArray.reduce((a, b) => {
+				return a + b;
+			}, 0);
+			const averageRating = sumRating / ratingsArray.length;
+			const businessStars = document.querySelectorAll(`.star-${business.id}`);
+			businessStars.forEach((star, index) => {
+				if (averageRating > index) {
+					star.classList.add('rated');
+				} else {
+					star.classList.remove('rated');
+				}
+			});
+			const businessId = document.getElementById(`business-${business.id}`);
+			businessId.setAttribute('data-rating', averageRating);
+		});
+	}
+
 	async function fetchBusinessSearch(body) {
 		try {
 			const res = await fetch('http://localhost:8080/businesses/search', {
@@ -22,19 +71,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
 			});
 
 			const { businesses } = await res.json();
-			console.log(businesses);
-			const businessCardsHTML = businesses.map(
-				(business) => `
-				<div class="card mt-2" id="business-${business.id}">
-					<div class="card-body">
-						<div class="card-text">${business.name}</div>
-						<div class="card-text">${business.phoneNum}</div>
-						<div class="card-text">${business.address}</div>
-					</div>
-				</div>
-			`
-			);
-			businessCardContainer.innerHTML = businessCardsHTML.join('');
+
+			// declare ratings array to store the ratings
+			generateCards(businesses);
+			findAverageRating(businesses);
 		} catch (err) {
 			console.error(err);
 		}
