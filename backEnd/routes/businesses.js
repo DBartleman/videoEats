@@ -2,20 +2,19 @@ const express = require('express');
 const { asyncHandler, handleValidationErrors } = require('../utils/utils');
 const { Business, Review, Tag, TagInstance, User, VoteInstance } = require('../db/models');
 const { requireAuth } = require('../utils/auth.js');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const router = express.Router();
 
-//Will need route auths for user actions
-//multi-roles; user/owner
+//TODO: multi-roles; user/owner
 
-//routes
+// business routes
 
 //create a new business entity for the database **Functioning 4.20.20**
 router.post(
 	'/',
-	//business-specific validation???
-	handleValidationErrors,
-	//requireAuth, removed for testing on Postman
+	requireAuth,
 	asyncHandler(async (req, res) => {
 		const business = await Business.create({ ...req.body });
 		res.status(201).json({
@@ -27,12 +26,44 @@ router.post(
 	})
 );
 
-//returns all business in the database
+//returns all businesses in the database
+
+//default return (limit of X?) businesses, ordered by rating
+//allow for search options
+//Name
+//Tag
+//Location
+
+//search route
+router.post(
+	'/search',
+	asyncHandler(async (req, res) => {
+		const { name, tag, loc } = req.body;
+		let businesses;
+
+		if (name) {
+			businesses = await Business.findAll({
+				where: { name: { [Op.iLike]: `%${name.toLowerCase()}%` } },
+				attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ]
+			});
+		} else if (tag) {
+			//TO-DO: SEARCH TAGS
+		} else {
+			//store and search by GPS???
+			const err = new Error();
+			err.title = 'Invalid search Term';
+			err.status = 400;
+			next(err);
+		}
+		res.json({ businesses });
+	})
+);
+
 router.get(
 	'/',
 	asyncHandler(async (req, res) => {
 		const businesses = await Business.findAll({
-			attributes: [ 'name', 'address', 'phoneNum', 'hours' ]
+			attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ] //verify this list of attributes
 		});
 		res.json({ businesses });
 	})
@@ -59,7 +90,7 @@ router.get(
 //updates specific business resource **Functioning 4.20.20**
 router.put(
 	'/:id(\\d+)',
-	//requireAuth, removed for postman testing
+	requireAuth,
 	asyncHandler(async (req, res, next) => {
 		const business = await Business.findByPk(req.params.id);
 		if (business) {
@@ -86,7 +117,7 @@ router.put(
 //deletes a specified business **Functioning 4.20.20**
 router.delete(
 	'/:id(\\d+)',
-	//requireAuth, removed for postman testing
+	//requireAuth, removed for postman testing. Add specific auth for admin functions?
 	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id, {
 			attributes: [ 'id' ]
@@ -99,28 +130,24 @@ router.delete(
 //review-based routes**************************************************
 
 //create a new review for specified business **Functioning 4.20.20**
+//pass tag options in req.body
 router.post(
 	'/:id(\\d+)/reviews',
-	//requireAuth, removed for postman testing
+	requireAuth,
 	asyncHandler(async (req, res) => {
-		const business = await Business.findByPk(req.params.id);
+		//const business = await Business.findByPk(req.params.id); unnecessary?
 		const review = await Review.create({ ...req.body.review }); //assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
-		res.status(201).json({
-			business: {
-				id: business.id,
-				name: business.name,
-				address: business.address,
-				phoneNum: business.phoneNum,
-				hours: business.hours,
-				description: business.description
-			},
-			review: {
-				id: review.id,
-				upVoteCount: review.upVoteCount,
-				downVoteCount: review.downVoteCount,
-				reviewText: review.reviewText
-			}
-		});
+		//grab tags
+		const { tags, user } = req.body;
+		//loop through tags and create associated TagInstances
+		for (let tag of tags) {
+			const tagInstance = await TagInstance.create({
+				reviewId: review.id,
+				userId: user.id,
+				typeId: tag.type
+			});
+		}
+		res.status(201).json({ review });
 	})
 );
 
@@ -128,7 +155,6 @@ router.post(
 //**functioning 4.20.20**
 router.get(
 	'/:id(\\d+)/reviews',
-	//requireAuth, taken out for simple postman tests
 	asyncHandler(async (req, res) => {
 		const reviews = await Review.findAll({
 			where: { businessId: req.params.id },
@@ -138,6 +164,10 @@ router.get(
 				{
 					model: User,
 					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
+				},
+				{
+					model: TagInstance,
+					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			],
 			order: [ [ 'createdAt', 'DESC' ] ]
@@ -154,9 +184,12 @@ router.get(
 		const review = await Review.findByPk(req.params.id, {
 			include: [
 				{
-					//do we need to include any specific attributes? Include may be unnecessary.
 					model: User,
-					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
+					attributes: [ 'id', 'userName' ]
+				},
+				{
+					model: TagInstance,
+					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			]
 		});
@@ -168,7 +201,7 @@ router.get(
 //**functioning 4.21.20**
 router.put(
 	'/reviews/:id(\\d+)',
-	//requireAuth, removed for postman testing
+	requireAuth,
 	asyncHandler(async (req, res, next) => {
 		const review = await Review.findByPk(req.params.id);
 		if (review) {
@@ -194,7 +227,7 @@ router.put(
 //deletes a specified review **Functioning 4.21.20**
 router.delete(
 	'/reviews/:id(\\d+)',
-	//requireAuth, removed for postman testing
+	requireAuth,
 	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
 			attributes: [ 'id' ]
@@ -222,7 +255,8 @@ router.get(
 	'/:id(\\d+)/tags',
 	asyncHandler(async (req, res) => {
 		const tags = await TagInstance.findAll({
-			where: { businessId: req.params.id }
+			where: { businessId: req.params.id },
+			attributes: [ 'tagId', [ sequelize.literal('(SELECT COUNT (*))') ] ]
 		});
 		res.json({ tags });
 	})
