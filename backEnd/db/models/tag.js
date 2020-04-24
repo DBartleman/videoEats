@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   //step through these associations and find the association blocking tagId update
   Tag.associate = function (models) {
+    Tag.hasMany(models.Business, { foreignKey: 'categoryId' });
     // Tag.belongsToMany(models.Review, {
     //   through: models.TagInstance,
     //   foreignKey: 'tagId',
