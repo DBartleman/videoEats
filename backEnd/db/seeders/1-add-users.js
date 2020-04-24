@@ -13,6 +13,16 @@ module.exports = {
 			{ userName: 'test7', firstName: 'Miguel', lastName: 'Gagliano', email: 'test7@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
 			{ userName: 'test8', firstName: 'Denae', lastName: 'Howser', email: 'test8@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
 			{ userName: 'test9', firstName: 'Harris', lastName: 'Bordeaux', email: 'test9@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test10', firstName: 'Johan', lastName: 'Ranbelmere', email: 'test10@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test11', firstName: 'Yvonne', lastName: 'Stutgart', email: 'test11@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test12', firstName: 'Buzz', lastName: 'Leapyear', email: 'test12@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test13', firstName: 'Mario', lastName: 'Sciebly', email: 'test13@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test14', firstName: 'Ashley', lastName: 'Yort', email: 'test14@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test15', firstName: 'Han', lastName: 'Yolo', email: 'test15@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test16', firstName: 'Chelsey', lastName: 'Wojcik', email: 'test16@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test17', firstName: 'Howard', lastName: 'Shores', email: 'test17@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test18', firstName: 'Tiffany', lastName: 'Goldman', email: 'test18@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
+			{ userName: 'test19', firstName: 'Sam', lastName: 'Pulmari', email: 'test19@gmail.com', hashedPass: 'pass', revScore: '0', statusTypeId: '2', createdAt: new Date(), updatedAt: new Date() },
 		], {});
 	},
 
