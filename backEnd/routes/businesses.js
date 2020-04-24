@@ -159,13 +159,13 @@ router.post(
 		//grab tags
 		const { tags, user } = req.body;
 		//loop through tags and create associated TagInstances
-		for (let tag of tags) {
-			const tagInstance = await TagInstance.create({
-				reviewId: review.id,
-				userId: user.id,
-				typeId: tag.type
-			});
-		}
+		// for (let tag of tags) {
+		// 	const tagInstance = await TagInstance.create({
+		// 		reviewId: review.id,
+		// 		userId: user.id,
+		// 		typeId: tag.type
+		// 	});
+		// }
 		res.status(201).json({ review });
 	})
 );

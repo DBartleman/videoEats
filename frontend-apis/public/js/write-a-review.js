@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 				body: JSON.stringify(body),
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `${localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN')}`
+					Authorization: `Bearer ${localStorage.getItem('VIDEO_EATS_ACCESS_TOKEN')}`
 				}
 			});
 			if (!res.ok) {
