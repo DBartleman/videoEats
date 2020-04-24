@@ -35,39 +35,41 @@ router.post(
 //Location
 
 //search route
-router.post('/search', asyncHandler(async (req, res) => {
-	const { name, tagBasic, tagMulti, loc } = req.body;
-	let businesses;
+router.post(
+	'/search',
+	asyncHandler(async (req, res) => {
+		const { name, tagBasic, tagMulti, loc } = req.body;
+		let businesses;
 
-	if (name) {
-		businesses = await Business.findAll({
-			where: { name: { [Op.iLike]: `%${name.toLowerCase()}%` } },
-			attributes: ['id', 'name', 'address', 'phoneNum', 'hours'],
-			include: {
-				model: Review,
-				attributes: ['businessRating']
-			}
-		});
-		//one tag (category) per business model
-	} else if (tagBasic) {
-		businesses = await Business.findAll({
-			include: [{
-				model: Tag,
-				attributes: ['id', 'type'],
-				where: { type: tagBasic }
-			}, {
-				model: Review,
-				attributes: ['businessRating']
-			}
-		]
-		});
-	}
-	//stretch - track multi-tag instances and return businesses that have search term as one of 3 most frequent tags
-	else if (tag-multi) {
-	//store and search by GPS???
-	}
-	else {
-		const err = new Error();
+		if (name) {
+			businesses = await Business.findAll({
+				where: { name: { [Op.iLike]: `%${name.toLowerCase()}%` } },
+				attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ],
+				include: {
+					model: Review,
+					attributes: [ 'businessRating' ]
+				}
+			});
+			//one tag (category) per business model
+		} else if (tagBasic) {
+			businesses = await Business.findAll({
+				include: [
+					{
+						model: Tag,
+						attributes: [ 'id', 'type' ],
+						where: { type: tagBasic }
+					},
+					{
+						model: Review,
+						attributes: [ 'businessRating' ]
+					}
+				]
+			});
+		} else if (tag - multi) {
+			//stretch - track multi-tag instances and return businesses that have search term as one of 3 most frequent tags
+			//store and search by GPS???
+		} else {
+			const err = new Error();
 			err.title = 'Invalid search Term';
 			err.status = 400;
 			next(err);
@@ -157,13 +159,13 @@ router.post(
 		//grab tags
 		const { tags, user } = req.body;
 		//loop through tags and create associated TagInstances
-		for (let tag of tags) {
-			const tagInstance = await TagInstance.create({
-				reviewId: review.id,
-				userId: user.id,
-				typeId: tag.type
-			});
-		}
+		// for (let tag of tags) {
+		// 	const tagInstance = await TagInstance.create({
+		// 		reviewId: review.id,
+		// 		userId: user.id,
+		// 		typeId: tag.type
+		// 	});
+		// }
 		res.status(201).json({ review });
 	})
 );
@@ -181,10 +183,6 @@ router.get(
 				{
 					model: User,
 					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
-				},
-				{
-					model: TagInstance,
-					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			],
 			order: [ [ 'createdAt', 'DESC' ] ]
