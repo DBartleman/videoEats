@@ -37,7 +37,7 @@ router.post(
 //search route
 router.post(
 	'/search',
-	asyncHandler(async (req, res) => {
+	asyncHandler(async (req, res, next) => {
 		const { name, tag, loc } = req.body;
 		let businesses;
 
@@ -51,7 +51,7 @@ router.post(
 		} else {
 			//store and search by GPS???
 			const err = new Error();
-			err.title = 'Invalid search Term';
+			err.title = `Invalid search Term: ${req.body.name}`;
 			err.status = 400;
 			next(err);
 		}

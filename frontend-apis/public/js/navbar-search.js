@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', (e) => {
+	// NavBar Selectors
 	const navbarSearchForm = document.querySelector('.navbar-search');
 	const searchButton = document.getElementById('search-btn');
 	const dropDown = document.querySelector('.dropdown');
@@ -9,7 +10,38 @@ document.addEventListener('DOMContentLoaded', (e) => {
 	const dropDownTag = document.getElementById('item-tag');
 	const searchField = document.querySelector('.searchField');
 	const collapseButton = document.querySelector('.navbar-collapse');
-	// let searchingFor = 1;
+
+	async function fetchBusinessSearch(body) {
+		try {
+			const res = await fetch('http://localhost:8080/businesses/search', {
+				method: 'POST',
+				body: JSON.stringify(body),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const { businesses } = await res.json();
+			console.log(businesses);
+			const businessCardsHTML = businesses.map(
+				(business) => `
+				<div class="card mt-2" id="business-${business.id}">
+					<div class="card-body">
+						<div class="card-text">${business.name}</div>
+						<div class="card-text">${business.phoneNum}</div>
+						<div class="card-text">${business.address}</div>
+					</div>
+				</div>
+			`
+			);
+			businessCardContainer.innerHTML = businessCardsHTML.join('');
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	// Business selectors
+	const businessCardContainer = document.querySelector('.business-card-container');
 
 	dropDown.addEventListener('click', () => {
 		document.querySelector('.dropdown-menu').classList.toggle('show');
@@ -33,22 +65,27 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		}
 	});
 
+	// check to see if there is already a search value in the session storage
+	const sessionSearchValue = sessionStorage.getItem('SEARCH_VALUE');
+	if (sessionSearchValue) {
+		document.getElementById('navbarSearch').value = sessionSearchValue;
+		const body = {
+			name: sessionSearchValue
+		};
+		fetchBusinessSearch(body);
+	}
+
 	// set up the event listener for the submit button
 	navbarSearchForm.addEventListener('submit', async (e) => {
 		// Prevent the default behavior of the submit button
 		e.preventDefault();
 		//TODO: when implementing search functionality
 
-		try {
-			const res = await fetch('http://localhost:8080/businesses/search', {
-				method: 'POST',
-				body: JSON.stringify(body),
-				header: {
-					'Content-Type': 'application/json'
-				}
-			});
-		} catch (err) {
-			console.error(err);
-		}
+		const searchValue = document.getElementById('navbarSearch').value;
+		sessionStorage.setItem('SEARCH_VALUE', searchValue);
+		const body = {
+			name: searchValue
+		};
+		fetchBusinessSearch(body);
 	});
 });
