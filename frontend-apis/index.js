@@ -49,7 +49,7 @@ app.get('/businesses/:id/write-a-review', async (req, res) => {
 	}
 });
 
-app.get('/businesses/search/?=', (req, res) => {
+app.get('/search', (req, res) => {
 	res.render('search');
 });
 
