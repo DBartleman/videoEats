@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (e) => {
-	const navbarSearch = document.querySelector('.navbar-search');
+	const navbarSearchForm = document.querySelector('.navbar-search');
 	const searchButton = document.getElementById('search-btn');
 	const dropDown = document.querySelector('.dropdown');
 	const dropDownToggle = document.querySelector('.dropdown-toggle');
@@ -34,17 +34,21 @@ document.addEventListener('DOMContentLoaded', (e) => {
 	});
 
 	// set up the event listener for the submit button
-	navbarSearch.addEventListener('submit', async (e) => {
+	navbarSearchForm.addEventListener('submit', async (e) => {
 		// Prevent the default behavior of the submit button
 		e.preventDefault();
-		//TODO: when implementing search functionality, find out why this action never fires
-		console.log('sanity check');
-		console.log(e.target.value);
-	});
+		//TODO: when implementing search functionality
 
-	searchButton.addEventListener('submit', async (e) => {
-		// e.preventDefault();
-		// console.log('sanity check');
-		// console.log(e.target.innerHTML);
+		try {
+			const res = await fetch('http://localhost:8080/businesses/search', {
+				method: 'POST',
+				body: JSON.stringify(body),
+				header: {
+					'Content-Type': 'application/json'
+				}
+			});
+		} catch (err) {
+			console.error(err);
+		}
 	});
 });
