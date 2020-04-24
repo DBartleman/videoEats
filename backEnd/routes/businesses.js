@@ -37,21 +37,40 @@ router.post(
 //search route
 router.post(
 	'/search',
-	asyncHandler(async (req, res, next) => {
-		const { name, tag, loc } = req.body;
+	asyncHandler(async (req, res) => {
+		const { name, tagBasic, tagMulti, loc } = req.body;
 		let businesses;
 
 		if (name) {
 			businesses = await Business.findAll({
 				where: { name: { [Op.iLike]: `%${name.toLowerCase()}%` } },
-				attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ]
+				attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ],
+				include: {
+					model: Review,
+					attributes: [ 'businessRating' ]
+				}
 			});
-		} else if (tag) {
-			//TO-DO: SEARCH TAGS
-		} else {
+			//one tag (category) per business model
+		} else if (tagBasic) {
+			businesses = await Business.findAll({
+				include: [
+					{
+						model: Tag,
+						attributes: [ 'id', 'type' ],
+						where: { type: tagBasic }
+					},
+					{
+						model: Review,
+						attributes: [ 'businessRating' ]
+					}
+				]
+			});
+		} else if (tag - multi) {
+			//stretch - track multi-tag instances and return businesses that have search term as one of 3 most frequent tags
 			//store and search by GPS???
+		} else {
 			const err = new Error();
-			err.title = `Invalid search Term: ${req.body.name}`;
+			err.title = 'Invalid search Term';
 			err.status = 400;
 			next(err);
 		}
