@@ -12,7 +12,10 @@ const router = express.Router();
 // business routes
 
 //create a new business entity for the database **Functioning 4.20.20**
-router.post('/', requireAuth, asyncHandler(async (req, res) => {
+router.post(
+	'/',
+	requireAuth,
+	asyncHandler(async (req, res) => {
 		const business = await Business.create({ ...req.body });
 		res.status(201).json({
 			business: {
@@ -39,16 +42,24 @@ router.post('/search', asyncHandler(async (req, res) => {
 	if (name) {
 		businesses = await Business.findAll({
 			where: { name: { [Op.iLike]: `%${name.toLowerCase()}%` } },
-			attributes: ['id', 'name', 'address', 'phoneNum', 'hours']
+			attributes: ['id', 'name', 'address', 'phoneNum', 'hours'],
+			include: {
+				model: Review,
+				attributes: ['businessRating']
+			}
 		});
 		//one tag (category) per business model
 	} else if (tagBasic) {
 		businesses = await Business.findAll({
-			include: {
+			include: [{
 				model: Tag,
 				attributes: ['id', 'type'],
 				where: { type: tagBasic }
-			},
+			}, {
+				model: Review,
+				attributes: ['businessRating']
+			}
+		]
 		});
 	}
 	//stretch - track multi-tag instances and return businesses that have search term as one of 3 most frequent tags
@@ -60,19 +71,25 @@ router.post('/search', asyncHandler(async (req, res) => {
 			err.title = 'Invalid search Term';
 			err.status = 400;
 			next(err);
-	}
-	res.json({ businesses })
-}))
+		}
+		res.json({ businesses });
+	})
+);
 
-router.get('/', asyncHandler(async (req, res) => {
-	const businesses = await Business.findAll({
-		attributes: ['id', 'name', 'address', 'phoneNum', 'hours']//verify this list of attributes
-	});
-	res.json({ businesses });
-}));
+router.get(
+	'/',
+	asyncHandler(async (req, res) => {
+		const businesses = await Business.findAll({
+			attributes: [ 'id', 'name', 'address', 'phoneNum', 'hours' ] //verify this list of attributes
+		});
+		res.json({ businesses });
+	})
+);
 
 //returns specific business resource **Functioning 4.20.20**
-router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
+router.get(
+	'/:id(\\d+)',
+	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id);
 		res.json({
 			business: {
@@ -88,7 +105,10 @@ router.get('/:id(\\d+)', asyncHandler(async (req, res) => {
 );
 
 //updates specific business resource **Functioning 4.20.20**
-router.put('/:id(\\d+)', requireAuth, asyncHandler(async (req, res, next) => {
+router.put(
+	'/:id(\\d+)',
+	requireAuth,
+	asyncHandler(async (req, res, next) => {
 		const business = await Business.findByPk(req.params.id);
 		if (business) {
 			await business.update({ ...req.body });
@@ -112,11 +132,12 @@ router.put('/:id(\\d+)', requireAuth, asyncHandler(async (req, res, next) => {
 );
 
 //deletes a specified business **Functioning 4.20.20**
-router.delete('/:id(\\d+)',
+router.delete(
+	'/:id(\\d+)',
 	//requireAuth, removed for postman testing. Add specific auth for admin functions?
 	asyncHandler(async (req, res) => {
 		const business = await Business.findByPk(req.params.id, {
-			attributes: ['id']
+			attributes: [ 'id' ]
 		});
 		await business.destroy();
 		res.end();
@@ -127,7 +148,10 @@ router.delete('/:id(\\d+)',
 
 //create a new review for specified business **Functioning 4.20.20**
 //pass tag options in req.body
-router.post('/:id(\\d+)/reviews', requireAuth, asyncHandler(async (req, res) => {
+router.post(
+	'/:id(\\d+)/reviews',
+	requireAuth,
+	asyncHandler(async (req, res) => {
 		//const business = await Business.findByPk(req.params.id); unnecessary?
 		const review = await Review.create({ ...req.body.review }); //assumes req body contains 'review' key with corresponding value of an object containing required parameters to construct a new review
 		//grab tags
@@ -146,7 +170,9 @@ router.post('/:id(\\d+)/reviews', requireAuth, asyncHandler(async (req, res) => 
 
 //get all reviews for specified business
 //**functioning 4.20.20**
-router.get('/:id(\\d+)/reviews', asyncHandler(async (req, res) => {
+router.get(
+	'/:id(\\d+)/reviews',
+	asyncHandler(async (req, res) => {
 		const reviews = await Review.findAll({
 			where: { businessId: req.params.id },
 			//include a bunch of tag/biz/user attributes as required by client
@@ -154,14 +180,14 @@ router.get('/:id(\\d+)/reviews', asyncHandler(async (req, res) => {
 			include: [
 				{
 					model: User,
-					attributes: ['id', 'userName', 'firstName', 'lastName']
+					attributes: [ 'id', 'userName', 'firstName', 'lastName' ]
 				},
 				{
 					model: TagInstance,
-					attributes: ['typeId']//include Tag model to get type name?
+					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			],
-			order: [['createdAt', 'DESC']]
+			order: [ [ 'createdAt', 'DESC' ] ]
 		});
 		res.json({ reviews });
 	})
@@ -169,16 +195,18 @@ router.get('/:id(\\d+)/reviews', asyncHandler(async (req, res) => {
 
 //* GET /businesses/:biz_id/reviews/:id - returns a given review
 //**functioning 4.21.20**
-router.get('/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
+router.get(
+	'/reviews/:id(\\d+)',
+	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
 			include: [
 				{
 					model: User,
-					attributes: ['id', 'userName']
+					attributes: [ 'id', 'userName' ]
 				},
 				{
 					model: TagInstance,
-					attributes: ['typeId']//include Tag model to get type name?
+					attributes: [ 'typeId' ] //include Tag model to get type name?
 				}
 			]
 		});
@@ -188,7 +216,10 @@ router.get('/reviews/:id(\\d+)', asyncHandler(async (req, res) => {
 
 //* PUT /businesses/:biz_id/reviews/:id - updates a given review
 //**functioning 4.21.20**
-router.put('/reviews/:id(\\d+)', requireAuth, asyncHandler(async (req, res, next) => {
+router.put(
+	'/reviews/:id(\\d+)',
+	requireAuth,
+	asyncHandler(async (req, res, next) => {
 		const review = await Review.findByPk(req.params.id);
 		if (review) {
 			await review.update({ ...req.body.review }); //assumes req body has nested review object
@@ -211,9 +242,12 @@ router.put('/reviews/:id(\\d+)', requireAuth, asyncHandler(async (req, res, next
 );
 
 //deletes a specified review **Functioning 4.21.20**
-router.delete('/reviews/:id(\\d+)', requireAuth, asyncHandler(async (req, res) => {
+router.delete(
+	'/reviews/:id(\\d+)',
+	requireAuth,
+	asyncHandler(async (req, res) => {
 		const review = await Review.findByPk(req.params.id, {
-			attributes: ['id']
+			attributes: [ 'id' ]
 		});
 		await review.destroy();
 		res.end();
@@ -224,21 +258,22 @@ router.delete('/reviews/:id(\\d+)', requireAuth, asyncHandler(async (req, res) =
 
 //get all searchable tags (for drop-down search/filter)
 //**functioning 4.21.20 */
-router.get('/tags', asyncHandler(async (req, res) => {
-		const tags = await Tag.findAll({ attributes: ['id', 'type'] });
+router.get(
+	'/tags',
+	asyncHandler(async (req, res) => {
+		const tags = await Tag.findAll({ attributes: [ 'id', 'type' ] });
 		res.json({ tags });
 	})
 );
 
 //get all tags for specified business
 //**functioning 4.21.20 */
-router.get('/:id(\\d+)/tags', asyncHandler(async (req, res) => {
+router.get(
+	'/:id(\\d+)/tags',
+	asyncHandler(async (req, res) => {
 		const tags = await TagInstance.findAll({
 			where: { businessId: req.params.id },
-			attributes: [
-				'tagId',
-				[sequelize.literal('(SELECT COUNT (*))')]
-			]
+			attributes: [ 'tagId', [ sequelize.literal('(SELECT COUNT (*))') ] ]
 		});
 		res.json({ tags });
 	})
@@ -247,7 +282,8 @@ router.get('/:id(\\d+)/tags', asyncHandler(async (req, res) => {
 //POST /businesses/:biz_id/reviews/:id/tags
 //create new tag and attach to specified review
 //functioning 4.22.20
-router.post('/:biz_id/reviews/:id/tags',
+router.post(
+	'/:biz_id/reviews/:id/tags',
 	//requireAuth
 	asyncHandler(async (req, res) => {
 		//get review
@@ -256,7 +292,7 @@ router.post('/:biz_id/reviews/:id/tags',
 		//assume req.body has "tag" key with text-value of target tag
 		const { tag, userId } = req.body;
 		//check database for tag, make it if it's new
-		const [tagType, _created] = await Tag.findOrCreate({
+		const [ tagType, _created ] = await Tag.findOrCreate({
 			where: { type: tag }
 		});
 
@@ -268,12 +304,13 @@ router.post('/:biz_id/reviews/:id/tags',
 		});
 		res.json({ tagInstance });
 	})
-)
+);
 
 //update a tag instance (not sure we need this endpoint)
 //same as delete (below), except we also pull out tagId from req.body
 //functioning 4.22.20
-router.put('/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
+router.put(
+	'/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
 	//requireAuth
 	asyncHandler(async (req, res, next) => {
 		//assumes userId, businessId and reviewId passed in request
@@ -300,17 +337,19 @@ router.put('/reviews/:rev_Id(\\d+)/tags/:id(\\d+)',
 			err.status = 404;
 			next(err);
 		}
-	}));
+	})
+);
 
 //DELETE /businesses/reviews/tags/:id - deletes a given tag instance for specified business
 //**Functioning 4.22.20 */
-router.delete('/reviews/tags',//do we need tagInstance id; will front-end have this info???:id',
+router.delete(
+	'/reviews/tags', //do we need tagInstance id; will front-end have this info???:id',
 	//requireAuth
 	asyncHandler(async (req, res, next) => {
 		//assumes userId, businessId and reviewId passed in request
 		const { userId, businessId, reviewId, tag } = req.body;
 		const tagType = await Tag.findOne({ where: { type: tag } });
-		console.log('tagType: ', tagType)
+		console.log('tagType: ', tagType);
 		if (tagType) {
 			const tagInstance = await TagInstance.findOne({
 				where: {
@@ -325,42 +364,48 @@ router.delete('/reviews/tags',//do we need tagInstance id; will front-end have t
 			if (tagInstance) {
 				await tagInstance.destroy();
 				res.json({ deleted: true });
-			} else {        //no tag instance to delete
+			} else {
+				//no tag instance to delete
 				const err = new Error();
 				err.title = 'TagInstance Not Found';
 				err.status = 404;
 				next(err);
 			}
-		} else {        //no tag type to delete
+		} else {
+			//no tag type to delete
 			const err = new Error();
 			err.title = 'Tag type Not Found';
 			err.status = 404;
 			next(err);
 		}
-
-
-	}));
+	})
+);
 
 //deletes a tag type from Tag table (no longer searchable)
 //functioning 4.22.20
-router.delete('/tags/:id(\\d+)', asyncHandler(async (req, res, next) => {
-	const tag = await Tag.findByPk(req.params.id);
-	if (tag) {
-		await tag.destroy();
-		res.json({ deleted: true })
-	} else {         //no tag type to delete
-		const err = new Error();
-		err.title = 'Tag type Not Found';
-		err.status = 404;
-		next(err);
-	}
-}))
+router.delete(
+	'/tags/:id(\\d+)',
+	asyncHandler(async (req, res, next) => {
+		const tag = await Tag.findByPk(req.params.id);
+		if (tag) {
+			await tag.destroy();
+			res.json({ deleted: true });
+		} else {
+			//no tag type to delete
+			const err = new Error();
+			err.title = 'Tag type Not Found';
+			err.status = 404;
+			next(err);
+		}
+	})
+);
 
 //************************************************ Vote-Based Routes ******************/
 
 //* POST /businesses/reviews/:id/votes - creates a new vote instance
 //**Functioning 4.23.20 ......TO-DO: add unique indexes to join tables */
-router.post('/reviews/:id(\\d+)/votes',
+router.post(
+	'/reviews/:id(\\d+)/votes',
 	//requireAuth - removed for testing with postman
 	asyncHandler(async (req, res) => {
 		const { user, vote } = req.body;
@@ -371,41 +416,45 @@ router.post('/reviews/:id(\\d+)/votes',
 		});
 		res.json({ newVote });
 	})
-)
+);
 
 //* GET /businesses/reviews/:id/votes - returns up/down counts for specified review (Is there a reason we need actual VoteInstance objects?)
 //**Functioning 4.23.20 */
-router.get('/reviews/:id(\\d+)/votes', asyncHandler(async (req, res) => {
-	const upCount = await VoteInstance.findAndCountAll({
-		where: {
-			reviewId: req.params.id,
-			typeId: 1
-		},
-		attributes: []
-	});
-	const downCount = await VoteInstance.findAndCountAll({
-		where: {
-			reviewId: req.params.id,
-			typeId: 2
-		},
-		attributes: []
-	});
-	res.json({
-		upCount: upCount.count,
-		downCount: downCount.count
-	});
-}))
+router.get(
+	'/reviews/:id(\\d+)/votes',
+	asyncHandler(async (req, res) => {
+		const upCount = await VoteInstance.findAndCountAll({
+			where: {
+				reviewId: req.params.id,
+				typeId: 1
+			},
+			attributes: []
+		});
+		const downCount = await VoteInstance.findAndCountAll({
+			where: {
+				reviewId: req.params.id,
+				typeId: 2
+			},
+			attributes: []
+		});
+		res.json({
+			upCount: upCount.count,
+			downCount: downCount.count
+		});
+	})
+);
 
 //* PUT /businesses/reviews/votes/:id - updates a specific vote instance for related review
 //**Functioning 4.23.20 */
-router.put('/reviews/:id(\\d+)/votes/',
+router.put(
+	'/reviews/:id(\\d+)/votes/',
 	//requireAuth
 	asyncHandler(async (req, res, next) => {
 		const { user: { id }, vote: { typeId } } = req.body;
 		const voteInstance = await VoteInstance.findOne({
 			where: {
 				reviewId: req.params.id,
-				userId: id,
+				userId: id
 				//$and: [{ businessId }, { userId }],
 				// $and: { userId }
 			}
@@ -425,11 +474,12 @@ router.put('/reviews/:id(\\d+)/votes/',
 			next(err);
 		}
 	})
-)
+);
 
 //delete voteInstance for specified review and passed-in user
 //**Functioning 4.23.20 */
-router.delete('/reviews/:id(\\d+)/votes',
+router.delete(
+	'/reviews/:id(\\d+)/votes',
 	//requireAuthh)
 	asyncHandler(async (req, res, next) => {
 		const { user: { id } } = req.body;
@@ -440,7 +490,7 @@ router.delete('/reviews/:id(\\d+)/votes',
 			}
 		});
 		if (voteInstance) {
-			console.log("voteInst", voteInstance)
+			console.log('voteInst', voteInstance);
 			await voteInstance.destroy();
 			//voteInstance.voteId = 2;
 			//const saveRes = await voteInstance.save();
@@ -451,5 +501,6 @@ router.delete('/reviews/:id(\\d+)/votes',
 			err.status = 404;
 			next(err);
 		}
-	}));
+	})
+);
 module.exports = router;
