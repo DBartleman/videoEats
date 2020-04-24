@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 		e.preventDefault();
 		//TODO: when implementing search functionality, find out why this action never fires
 		console.log('sanity check');
-		console.log(e.target);
+		console.log(e.target.value);
 	});
 
 	searchButton.addEventListener('submit', async (e) => {
