@@ -3,9 +3,11 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 	const tagResults = document.querySelector('.tags-results');
 	const tagItems = document.querySelector('.tag-item');
 	const selectedTags = document.querySelector('.selected-tags');
+
+	// this autocomplete function will filter out the results. as we type, there will be a list of category tags that are pulled from the backend api.
 	function autoComplete(array, input) {
 		return array.filter((tag) => {
-			return tag.toLowerCase().includes(input.toLowerCase());
+			return tag.type.toLowerCase().includes(input.toLowerCase());
 		});
 	}
 	try {
@@ -13,25 +15,31 @@ document.addEventListener('DOMContentLoaded', async (e) => {
 		const res = await fetch('http://localhost:8080/businesses/tags');
 		const { tags } = await res.json();
 		console.log(tags);
-		let tagsArray = [];
-		tags.forEach((tag) => {
-			tagsArray.push(tag.type);
-		});
-		console.log(tagsArray);
 		searchTagsField.addEventListener('keyup', (e) => {
-			let data = autoComplete(tagsArray, e.target.value);
+			let data = autoComplete(tags, e.target.value);
 			if (!e.target.value) {
 				tagResults.innerHTML = '';
 				return;
 			}
 			const listOfTags = data.map(
 				(element) => `
-                <li class="tag-item">${element}</li>
-            `
+			    <li class="tag-item" id="tag-${element.id}">${element.type}</li>
+			`
 			);
 			tagResults.innerHTML = listOfTags.join('');
 		});
 	} catch (err) {
 		console.error(err);
 	}
+	const createDiv = document.createElement('div');
+	const createSelectedULDiv = document.createElement('ul');
+	tagResults.addEventListener('click', (e) => {
+		console.log(e.target.id, e.target.innerHTML);
+		createDiv.classList.add('tag-control');
+		const createSelectedLIDiv = document.createElement('li');
+		createSelectedLIDiv.innerHTML = e.target.innerHTML;
+		createSelectedULDiv.appendChild(createSelectedLIDiv);
+		createDiv.appendChild(createSelectedULDiv);
+		selectedTags.appendChild(createDiv);
+	});
 });
