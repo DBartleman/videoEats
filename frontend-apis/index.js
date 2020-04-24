@@ -48,8 +48,8 @@ app.get('/businesses/:id/write-a-review', async (req, res) => {
 	}
 });
 
-app.get('/businesses/search/?=', (req, res) => {
-	res.render('search');
+app.get('/search', (req, res) => {
+	res.render('search', { title: 'Search' });
 });
 
 app.get('/map', (req, res) => {

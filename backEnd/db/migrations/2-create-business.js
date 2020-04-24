@@ -28,8 +28,15 @@ module.exports = {
       ownerId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Users",
-          key: "id"
+          model: 'Users',
+          key: 'id'
+        }
+      },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Tags',
+          key: 'id'
         }
       },
       createdAt: {
