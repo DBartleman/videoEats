@@ -37,7 +37,7 @@
 * Link/presentation to all reviews for business
 
 
-## Bonus Features
+## Future direction for features:
 * Business User authorization
 * Upvote / downvote
 * Mark reviews funny, cool, useful, etc 
