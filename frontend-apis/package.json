@@ -14,7 +14,7 @@
 		"express": "^4.17.1",
 		"localStorage": "^1.0.4",
 		"node-fetch": "^2.6.0",
-		"pug": "^2.0.4"
+		"pug": "^3.0.1"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.3"
